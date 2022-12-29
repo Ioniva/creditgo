@@ -39,8 +39,8 @@
                 <p class="text-2xs font-light ml-4">24 horas al día, 7 días a la semana, incluidos fines de semana y festivos</p>
             </div>
             <div class="w-1/2 flex items-center ml-1">
-                <img class="w-5 fill-white" src="src/lib/img/icons/consent.svg" alt="consent icon">
-                <p class="text-2xs font-light ml-4">Aprobare în 2 minute, transfer bani instant</p>
+                <img class="w-4 fill-white" src="src/lib/img/icons/consent.svg" alt="consent icon">
+                <p class="text-2xs font-light ml-4">Aprobación en 2 minutos, transferencia de dinero instantánea</p>
             </div>
         </div>
         <div class="w-full p-10">
@@ -62,6 +62,7 @@
         </div>
         <hr class="w-3/4 mx-auto">
         <div class="my-6">
+            <!-- TODO: generar valores dinamicos -->
             <table class="w-1/2 mx-auto">
                 <tbody>
                     <tr>
@@ -87,6 +88,10 @@
                 </tbody>
             </table>
         </div>
+        <div class="w-1/4 mx-auto">
+            <!-- TODO: encapsular el boton en un formulario -->
+            <button type="submit" class="btn btn-filled-secondary btn-base">Solicita tu crédito</button>
+        </div>
     </div>
 </section>
 
@@ -107,6 +112,5 @@
     .text-2xs {
         font-size: 12px;
     }
-
 
 </style>
