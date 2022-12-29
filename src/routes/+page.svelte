@@ -26,14 +26,20 @@
             </div>
         </div>
     </div>
-    <div class="w-50">Texto</div>
+    <div class="w-50">
+        <div class="bg-orange-500">
+            coso
+        </div>
+    </div>
 </section>
 
 <style>
-    .bg-image {
-        background: url('src/lib/img/girl.png') no-repeat;
-        background-size: contain;
-        width: 100%;
+    @media (min-width: 768px){
+        .bg-image {
+                background: url('src/lib/img/girl.png') no-repeat;
+                background-size: contain;
+                width: 100%;
+            }
     }
 
     .stick {
