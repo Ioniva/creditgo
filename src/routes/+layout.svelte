@@ -11,12 +11,16 @@
 		<!-- App Bar -->
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<strong class="text-xl uppercase">Skeleton</strong>
+                <img class="h-12 w-50" src="src/lib/img/logo.png" alt="credgo logo">
+                <div>
+                    <a class="btn btn-base" href="/">Preguntas frecuentes</a>
+                    <a class="btn btn-base" href="/">Tasas de interes</a>
+                    <a class="btn btn-base" href="/">Progresión</a>
+                </div>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<a class="btn btn-sm btn-ghost-surface" href="https://discord.gg/EXqV7W8MtY" target="_blank" rel="noreferrer">Discord</a>
-				<a class="btn btn-sm btn-ghost-surface" href="https://twitter.com/SkeletonUI" target="_blank" rel="noreferrer">Twitter</a>
-				<a class="btn btn-sm btn-ghost-surface" href="https://github.com/skeletonlabs/skeleton" target="_blank" rel="noreferrer">GitHub</a>
+                <a class="btn btn-base btn-filled-primary" href="/">Registrate</a>
+				<a class="btn btn-base btn-ringed-primary" href="/">Ingresa</a>
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
