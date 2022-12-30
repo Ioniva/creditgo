@@ -15,7 +15,7 @@
                 <div>
                     <a class="btn btn-base" href="/">Inicio</a>
                     <a class="btn btn-base" href="/faq">Preguntas frecuentes</a>
-                    <a class="btn btn-base" href="/">Tasas de interes</a>
+                    <a class="btn btn-base" href="/interest-rates">Tasas de interes</a>
                     <a class="btn btn-base" href="/">Progresión</a>
                 </div>
 			</svelte:fragment>
