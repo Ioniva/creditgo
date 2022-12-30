@@ -8,4 +8,7 @@
 <Calculator></Calculator>
 <Prequirement></Prequirement>
 <Benefit></Benefit>
+<!-- TODO: Cambiar icono -->
+<!-- TODO: Poner un tooltip o algo por el estilo -->
+<a class="fixed bottom-20 right-20 btn-icon btn-filled-success" href="/">📞</a>
 <Footer></Footer>
