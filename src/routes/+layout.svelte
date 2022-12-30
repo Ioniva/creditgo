@@ -13,7 +13,8 @@
 			<svelte:fragment slot="lead">
                 <img class="h-12 w-50" src="src/lib/img/logo.png" alt="credgo logo">
                 <div>
-                    <a class="btn btn-base" href="/">Preguntas frecuentes</a>
+                    <a class="btn btn-base" href="/">Inicio</a>
+                    <a class="btn btn-base" href="/faq">Preguntas frecuentes</a>
                     <a class="btn btn-base" href="/">Tasas de interes</a>
                     <a class="btn btn-base" href="/">Progresión</a>
                 </div>

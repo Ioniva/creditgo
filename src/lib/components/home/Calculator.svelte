@@ -60,6 +60,7 @@
                 </RadioGroup>
             </div>
         </div>
+        <!-- TODO: Cambiarlo por el <Divider> de skeleton -->
         <hr class="w-3/4 mx-auto">
         <div class="my-6">
             <!-- TODO: generar valores dinamicos -->

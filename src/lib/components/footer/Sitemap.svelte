@@ -1,4 +1,4 @@
-<div class="grid grid-cols-2 gap-8 py-8 px-6 md:grid-cols-4">
+<div class="container mx-auto grid grid-cols-2 gap-8 py-8 px-6 md:grid-cols-4">
     <div>
         <h2 class="mb-6 text-sm font-semibold text-gray-500 uppercase dark:text-gray-400">Company</h2>
         <ul class="text-gray-500 dark:text-gray-400">

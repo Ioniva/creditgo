@@ -5,5 +5,6 @@
         <img class="w-28 object-contain" src="src/lib/img/brands/heavy.png" alt="heavy brand logo">
         <img class="w-28 object-contain" src="src/lib/img/brands/vogue.png" alt="vogue brand logo">
     </div>
+    <!-- TODO: Cambiarlo por el <Divider> de skeleton -->
     <hr class="w-3/4 mx-auto my-6">
 </section>
