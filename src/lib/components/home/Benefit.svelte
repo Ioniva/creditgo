@@ -3,15 +3,18 @@
     <div class="container mx-auto flex mx-auto gap-60 mt-10">
         <div class="flex flex-col items-center w-full">
             <img src="src/lib/img/icons/24ore.png" alt="availability icon">
-            <p class="mt-6"><b>Dinero en 48 horas</b> con el servicio auxiliar y opcional de gestión de préstamo de vivienda</p>
+            <h6 class="text-base mt-6">Siempre la mejor oferta</h6>
+            <p>Obtén tu crédito personal en el primer intento. Ahórrate problemas, dinero y tiempo.</p>
         </div>
         <div class="flex flex-col items-center w-full">
             <img src="src/lib/img/icons/ratefixe.png" alt="availability icon">
-            <p class="mt-6"><b>Cuotas fijas</b> semanales o mensuales según el préstamo elegido</p>
+            <h6 class="text-base mt-6">Fácil, rápido y seguro</h6>
+            <p>Sin letra pequeña, con total transparencia y seguridad.</p>
         </div>
         <div class="flex flex-col items-center w-full">
             <img src="src/lib/img/icons/faragarantii.png" alt="availability icon">
-            <p class="mt-6"><b>Sin garantías ni avales</b></p>
+            <h6 class="text-base mt-6">Sin garantías de pago</h6>
+            <p>Préstamos rápidos sin aval y sin papeleos. Todo 100% online.</p>
         </div>
     </div>
 </section>

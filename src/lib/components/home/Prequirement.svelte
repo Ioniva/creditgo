@@ -1,4 +1,4 @@
-<section class="container h-1/3 mx-auto flex">
+<section class="container h-1/5 mx-auto flex">
     <h2 class="w-1/5 flex mx-auto text-4xl justify-left items-center">Requisitos</h2>
     <div class="w-3/4 flex items-center gap-10">
         <div class="flex items-center w-1/2 gap-4">
