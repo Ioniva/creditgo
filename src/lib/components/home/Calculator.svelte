@@ -4,7 +4,7 @@
     let value = 50;
 </script>
 
-<section class="container mx-auto h-3/5 flex">
+<section class="container mx-auto h-1/2 flex">
     <div class="w-1/2 bg-image">
         <div class="stick">
             <h1 class="text-6xl">
