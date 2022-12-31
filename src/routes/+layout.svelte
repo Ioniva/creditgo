@@ -20,7 +20,7 @@
                 </div>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-                <a class="btn btn-base btn-filled-primary" href="/">Registrate</a>
+                <a class="btn btn-base btn-filled-primary" href="/register">Registrate</a>
 				<a class="btn btn-base btn-ringed-primary" href="/">Ingresa</a>
 			</svelte:fragment>
 		</AppBar>
