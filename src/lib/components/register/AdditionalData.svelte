@@ -1,6 +1,5 @@
 <small>* Campos obligatorios</small>
 <form action="" class="w-1/2">
-
     <div class="grid md:grid-cols-2 md:gap-x-6">
         <div class="mb-6 w-full group">
             <label>

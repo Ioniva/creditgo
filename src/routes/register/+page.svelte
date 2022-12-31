@@ -4,6 +4,7 @@
 	import AccountData from "../../lib/components/register/AccountData.svelte";
 	import AdditionalData from "../../lib/components/register/AdditionalData.svelte";
 	import PersonalData from "../../lib/components/register/PersonalData.svelte";
+	import ReferenceData from "../../lib/components/register/ReferenceData.svelte";
     const active = writable(0);
     const onComplete = () => {
         alert("Has completado!")
@@ -12,7 +13,7 @@
 
 <div class="container mx-auto">
     <h1 class="my-8">Register page</h1>
-    <Stepper {active} length={3} on:complete={onComplete}>
+    <Stepper {active} length={4} on:complete={onComplete}>
         <Step index={0}>
             <svelte:fragment slot="header">
                 <span class="text-3xl font-bold">Datos de tu cuenta</span>
@@ -30,6 +31,12 @@
                 <span class="text-3xl font-bold">Datos adicionales</span>
             </svelte:fragment>
             <AdditionalData></AdditionalData>
+        </Step>
+        <Step index={3}>
+            <svelte:fragment slot="header">
+                <span class="text-3xl font-bold">Referencia (fiador)</span>
+            </svelte:fragment>
+            <ReferenceData></ReferenceData>
         </Step>
     </Stepper>
 </div>
