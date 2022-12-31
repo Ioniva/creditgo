@@ -73,23 +73,6 @@
     <div class="grid md:grid-cols-2 md:gap-x-6">
         <div class="mb-6 w-full group">
             <label>
-                <span class="text-base font-bold">Nombre*</span>
-                <input type="text" placeholder="Nombre*" required />
-            </label>
-        </div>
-        <div class="mb-6 w-full group">
-            <label>
-                <span class="text-base font-bold">Apellidos*</span>
-                <input type="text" placeholder="Apellidos*" required />
-            </label>
-        </div>
-    </div>
-    <!-- /Nombres -->
-
-    <!-- Nombres -->
-    <div class="grid md:grid-cols-2 md:gap-x-6">
-        <div class="mb-6 w-full group">
-            <label>
                 <span class="text-base font-bold">Celular*</span>
                 <input type="tel" placeholder="Celular*" required />
             </label>

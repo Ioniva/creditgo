@@ -2,6 +2,7 @@
 	import { ProgressBar, Step, Stepper } from "@skeletonlabs/skeleton";
     import { writable } from "svelte/store";
 	import AccountData from "../../lib/components/register/AccountData.svelte";
+	import PersonalData from "../../lib/components/register/PersonalData.svelte";
     const active = writable(0);
     const onComplete = () => {
         alert("Has completado!")
@@ -17,6 +18,11 @@
             </svelte:fragment>
             <AccountData></AccountData>
         </Step>
-        <Step index={1} locked={false}>(content)</Step>
+        <Step index={1}>
+            <svelte:fragment slot="header">
+                <span class="text-3xl font-bold">Datos personales</span>
+            </svelte:fragment>
+            <PersonalData></PersonalData>
+        </Step>
     </Stepper>
 </div>
