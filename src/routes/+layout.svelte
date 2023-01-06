@@ -21,7 +21,7 @@
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
                 <a class="btn btn-base btn-filled-primary" href="/register">Registrate</a>
-				<a class="btn btn-base btn-ringed-primary" href="/">Ingresa</a>
+				<a class="btn btn-base btn-ringed-primary" href="/login">Ingresa</a>
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
