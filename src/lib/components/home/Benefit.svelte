@@ -1,6 +1,6 @@
 <section class="h-1/3 text-center bg-wave p-8">
     <h2 class="text-5xl">Las ventajas de un préstamo <br> no bancario</h2>
-    <div class="container mx-auto flex mx-auto gap-60 mt-10">
+    <div class="container flex mx-auto gap-60 mt-10">
         <div class="flex flex-col items-center w-full">
             <img src="src/lib/img/icons/24ore.png" alt="availability icon">
             <h6 class="text-base mt-6">Siempre la mejor oferta</h6>

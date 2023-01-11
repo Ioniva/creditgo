@@ -8,6 +8,14 @@
 <!-- App Shell -->
 <AppShell slotSidebarLeft="bg-surface-500/5 w-56 p-4">
 	<svelte:fragment slot="header">
+
+        <!-- Contact -->
+        <section class="h-8 flex justify-center gap-4">
+            <p class="unstyled text-base text-blue-200 mr-8">Contáctanos:</p>
+            <p class="unstyled text-base text-blue-200">+13 311 123 123</p>
+            <p class="unstyled text-base text-blue-200">PBX (701)2141123</p>
+        </section>
+
 		<!-- App Bar -->
 		<AppBar>
 			<svelte:fragment slot="lead">
