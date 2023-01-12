@@ -1,5 +1,6 @@
 <script>
 	import { ProgressRadial, RadioGroup, RadioItem, RangeSlider } from "@skeletonlabs/skeleton";
+	import RoundRangeSlider from "../RoundRangeSlider.svelte";
 
     let value = 50;
 </script>
@@ -47,8 +48,9 @@
             <div class="flex flex-col m-auto">
                 <!-- TODO: cambiar el titulo a un <p></p>  -->
                 <h3 class="text-center">1. ¿Cúanto dinero necesitas?</h3>
-                <ProgressRadial class="w-1/4 mx-auto my-6" {value}>{value}%</ProgressRadial>
-                <RangeSlider class="w-1/3 mx-auto" max={100} step={1} bind:value />
+                <!-- <ProgressRadial class="w-1/4 mx-auto my-6" {value}>{value}%</ProgressRadial>
+                <RangeSlider class="w-1/3 mx-auto" max={100} step={1} bind:value /> -->
+                <RoundRangeSlider></RoundRangeSlider>
             </div>
             <div>
                 <!-- TODO: cambiar el titulo a un <p></p>  -->
