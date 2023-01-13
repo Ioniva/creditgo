@@ -1,6 +1,8 @@
 <script>
   let isDragging = false;
-  let angle = 25;
+  let angle = 0;
+  let maxValue = 720;
+  let value = 0;
 
   function handleMouseDown() {
     isDragging = true;
@@ -25,6 +27,7 @@
         angle = 360 + angle;
     }
     angle = Math.round(angle);
+    value = angle * (maxValue / 360);
   }
 </script>
 
@@ -36,7 +39,7 @@
     on:mousemove={handleMouseMove}
     on:mouseleave={handleMouseUp}
   >
-  <div class="debug">{angle} deg</div>
+  <div class="debug">{value} deg</div>
   <div class="dot" style={`transform: rotate(${angle}deg)`}></div>
 </div>
 

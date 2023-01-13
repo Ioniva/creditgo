@@ -1,6 +1,7 @@
 <script>
 	import { ProgressRadial, RadioGroup, RadioItem, RangeSlider } from "@skeletonlabs/skeleton";
 	import RoundRangeSlider from "../RoundRangeSlider.svelte";
+	import RoundRangeSliderThree from "../RoundRangeSliderThree.svelte";
 	import RoundRangeSliderTwo from "../RoundRangeSliderTwo.svelte";
 
     let value = 50;
@@ -51,7 +52,7 @@
                 <h3 class="text-center my-6">1. ¿Cúanto dinero necesitas?</h3>
                 <!-- <ProgressRadial class="w-1/4 mx-auto my-6" {value}>{value}%</ProgressRadial>
                 <RangeSlider class="w-1/3 mx-auto" max={100} step={1} bind:value /> -->
-                <RoundRangeSliderTwo></RoundRangeSliderTwo>
+                <RoundRangeSliderThree></RoundRangeSliderThree>
             </div>
             <div>
                 <!-- TODO: cambiar el titulo a un <p></p>  -->

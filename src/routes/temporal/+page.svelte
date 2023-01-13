@@ -1,7 +1,9 @@
 <script>
+	import RoundRangeSliderThree from "../../lib/components/RoundRangeSliderThree.svelte";
+
 
 	import RoundRangeSliderTwo from "../../lib/components/RoundRangeSliderTwo.svelte";
 
 </script>
 
-<RoundRangeSliderTwo></RoundRangeSliderTwo>
+<RoundRangeSliderThree></RoundRangeSliderThree>
