@@ -1,96 +1,102 @@
 <script>
+  import { onMount } from "svelte";
 
-    let isDragging = false;
-    let price = 20;
 
-   function calculateMousePosition(event) {
-        // Get the bounding rect of the input element
-        const rect = event.target.getBoundingClientRect();
+  /** @type {Number} Set the min value. By default is 0*/
+  export let min = 0;
 
-        // Calculate the center point of the input element
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
+  /** @type {Number} Set the max value. By default is 100*/
+  export let max = 100;
 
-        // Calculate the angle between the center point and the mouse position
-        return Math.atan2(event.clientY - centerY, event.clientX - centerX);
+  /** @type {Number} Set the jump step value. By default is 1*/
+  export let step = 1;
+
+  /** @type {Number} Set the current value. By default min value
+  */
+  export let value = 0;
+
+  /** @type {String} */
+  export let label = "deg";
+
+  /** @type {"before" | "after"} */
+  export let textPosition = "before";
+
+  let isDragging = false;
+  let angle = 0;
+
+  function calculateAngle(value) {
+    angle = (value / max) * 360;
+  }
+
+  function handleMouseDown() {
+    isDragging = true;
+  }
+
+  function handleMouseUp() {
+    isDragging = false;
+  }
+
+  function handleMouseMove(e) {
+    if (!isDragging) return;
+    const circle = e.currentTarget.parentNode;
+    const centerX = circle.offsetWidth / 2;
+    const centerY = circle.offsetHeight / 2;
+    const posX = e.clientX - circle.offsetLeft;
+    const posY = e.clientY - circle.offsetTop;
+    const deltaY = centerY - posY;
+    const deltaX = centerX - posX;
+    angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+    angle -= 90;
+    if (angle < 0) {
+        angle = 360 + angle;
     }
 
-    function calculateAngle(radians) {
-        // Convert angle to degrees
-        let angle = radians * 180 / Math.PI;
+    angle = Math.round(angle);
+    value = (angle * (max - min)) / 360;
+    value = Math.round(value / step) * step;
+    value = value + min;
+}
 
-        // Make sure angle is between 0 and 360
-        return (angle + 360) % 360;
-    }
+  onMount( async () => {
+    calculateAngle(value);
+  })
 
-    function calculateValue(angle) {
-        // Convert the angle to a value between 0 and 100
-        let value = angle / 360 * 100;
-
-        if(value < 0){
-            value = 0;
-        }else if(value > 100){
-            value = 100;
-        }
-        return value;
-    }
-
-    function updateInput(event, value) {
-        // Update the value of the input element
-        event.target.value = value;
-        price = event.target.value;
-    }
-
-    function updateDot(value) {
-        const dot = document.getElementById("range");
-
-        // Set the transform property of the dot element
-        dot.style.transform = `rotate(${(value / 100) * 360}deg)`;
-    }
-
-    function calculateAngleValue(event) {
-        if (isDragging) {
-            const mousePosition = calculateMousePosition(event);
-            const angle = calculateAngle(mousePosition);
-            const value = calculateValue(angle);
-            updateInput(event, value);
-            updateDot(value);
-        }
-    }
 </script>
 
-<!-- <div class="debug">$ {price}</div> -->
-<div class="circle">
-    <input
-        type="range"
-        id="range"
-        class="dot"
-        min="0" max="200" step="1"
-        value={price}
-        on:mousedown={() => isDragging = true}
-        on:mousemove={calculateAngleValue}
-        on:mouseup={() => isDragging = false}
-        on:mouseleave={() => isDragging = false}
-    >
-    <span class="debug">$ {price}</span>
+<div
+    class="circle"
+    on:mousedown={handleMouseDown}
+    on:mouseup={handleMouseUp}
+    on:mousemove={handleMouseMove}
+    on:mouseleave={handleMouseUp}
+  >
+    {#if textPosition === "before" }
+        <p class="debug">{label} {value}</p>
+    {/if}
+
+    {#if textPosition === "after"}
+    <p class="debug">{value} {label}</p>
+    {/if}
+
+  <div class="dot" style={`transform: rotate(${angle}deg)`}></div>
 </div>
 
 <style>
-    .debug {
+   .debug {
         color: #9b59b6;
         font-family: monospace;
-        position: relative;
+        position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 100;
-        font-size: 3vw;
+        font-size: 1.4rem;
     }
     .circle {
         position: relative;
-        width: 10rem;
-        height: 10rem;
-        /* padding-bottom: 25%; */
+        width: 15rem;
+        height: 15rem;
+        padding-bottom: 25%;
         margin: 0 auto;
         background-color: #9b59b6;
         border-radius: 50%;
@@ -114,8 +120,8 @@
     }
     .circle .dot {
         position: absolute;
-        background-color: green;
-        width: 20px;
+        /* background-color: green; */
+        width: 25px;
         height: 50%;
         left: 47.5%;
         top: 0;
