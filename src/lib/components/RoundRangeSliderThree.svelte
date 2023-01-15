@@ -1,8 +1,16 @@
 <script>
   let isDragging = false;
   let angle = 0;
-  let maxValue = 720;
   let value = 0;
+
+  /** @type {Number} Set the max value. By default is 100*/
+  export let max = 100;
+
+  /** @type {"before" | "after"} */
+  export let textPosition = "before";
+
+  /** @type {String} */
+  export let label = "deg";
 
   function handleMouseDown() {
     isDragging = true;
@@ -26,8 +34,8 @@
     if (angle < 0) {
         angle = 360 + angle;
     }
-    angle = Math.round(angle);
-    value = angle * (maxValue / 360);
+    angle = angle;
+    value = Math.round(angle * (max / 360));
   }
 </script>
 
@@ -39,7 +47,14 @@
     on:mousemove={handleMouseMove}
     on:mouseleave={handleMouseUp}
   >
-  <div class="debug">{value} deg</div>
+    {#if textPosition === "before" }
+        <p class="debug">{label} {value}</p>
+    {/if}
+
+    {#if textPosition === "after"}
+    <p class="debug">{value} {label}</p>
+    {/if}
+
   <div class="dot" style={`transform: rotate(${angle}deg)`}></div>
 </div>
 
