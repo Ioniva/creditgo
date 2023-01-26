@@ -48,6 +48,7 @@
             </label>
         </div>
         <div class="mb-6 w-full group">
+            <!-- TODO: modificar el maximo -->
             <label for="">
                 <span>Número de hijos</span>
                 <input type="number" value="0" min="0" max="6">

@@ -1,15 +1,28 @@
 <script>
 	import { ProgressBar } from "@skeletonlabs/skeleton";
+
+    import { setContext } from "svelte";
+
+    // function handleSubmit(event){
+    //     const formData = event.target;
+    //     console.log(formData)
+        // const loginData = {
+        //     email: formData.email,
+        //     password: formData.password
+        // }
+        // setContext('loginData', loginData);
+    // }
+
 </script>
 
 <small>* Campos obligatorios</small>
-<form action="" class="w-1/2">
+<form action="?/account" method="POST" class="w-1/2">
     <!-- Cedula -->
     <div class="grid md:grid-cols-2 md:gap-6">
         <div class="mb-6 w-full group">
             <label>
                 <span class="text-base font-bold">Cédula*</span>
-                <input type="text" placeholder="Cédula*" required />
+                <input type="text" placeholder="Cédula*"   />
             </label>
         </div>
     </div>
@@ -20,13 +33,13 @@
         <div class="mb-6 w-full group">
             <label>
                 <span class="text-base font-bold">Contraseña*</span>
-                <input type="password" placeholder="Contraseña*" required />
+                <input type="password" name="password" placeholder="Contraseña*"   />
             </label>
         </div>
         <div class="mb-6 w-full group">
             <label>
                 <span class="text-base font-bold">Confirmar contraseña*</span>
-                <input type="password" placeholder="Confirmar contraseña*" required />
+                <input type="password" placeholder="Confirmar contraseña*"   />
             </label>
         </div>
     </div>
@@ -53,13 +66,13 @@
         <div class="mb-6 w-full group">
             <label>
                 <span class="text-base font-bold">Correo*</span>
-                <input type="email" placeholder="Correo*" required />
+                <input type="email" name="email" placeholder="Correo*"   />
             </label>
         </div>
         <div class="mb-6 w-full group">
             <label>
                 <span class="text-base font-bold">Confirmar correo*</span>
-                <input type="email" placeholder="Confirmar correo*" required />
+                <input type="email" placeholder="Confirmar correo*"   />
             </label>
         </div>
     </div>
@@ -74,13 +87,13 @@
         <div class="mb-6 w-full group">
             <label>
                 <span class="text-base font-bold">Celular*</span>
-                <input type="tel" placeholder="Celular*" required />
+                <input type="tel" placeholder="Celular*"   />
             </label>
         </div>
         <div class="mb-6 w-full group">
             <label>
                 <span class="text-base font-bold">Confirmar celular*</span>
-                <input type="tel" placeholder="Confirmar celular*" required />
+                <input type="tel" placeholder="Confirmar celular*"   />
             </label>
         </div>
     </div>

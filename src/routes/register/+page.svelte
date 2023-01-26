@@ -1,20 +1,21 @@
 <script>
-	import { ProgressBar, Step, Stepper } from "@skeletonlabs/skeleton";
+	// import { Step, Stepper } from "@skeletonlabs/skeleton";
+    import Step from '../../lib/components/ui-library/Stepper/Step.svelte';
+    import Stepper from '../../lib/components/ui-library/Stepper/Stepper.svelte';
     import { writable } from "svelte/store";
 	import AccountData from "../../lib/components/register/AccountData.svelte";
 	import AdditionalData from "../../lib/components/register/AdditionalData.svelte";
 	import PersonalData from "../../lib/components/register/PersonalData.svelte";
 	import ReferenceData from "../../lib/components/register/ReferenceData.svelte";
+
     const active = writable(0);
-    const onComplete = () => {
-        alert("Has completado!")
-    }
+    const onComplete = () => alert("Has completado!");
 </script>
 
 <div class="container mx-auto">
     <h1 class="my-8">Register page</h1>
     <Stepper {active} length={4} on:complete={onComplete}>
-        <Step index={0}>
+        <Step index={0} nextButtonType="submit">
             <svelte:fragment slot="header">
                 <span class="text-3xl font-bold">Datos de tu cuenta</span>
             </svelte:fragment>
