@@ -2,15 +2,18 @@ import { fail } from '@sveltejs/kit';
 import { loginSchema } from "../../lib/schemas";
 import { validateData } from "../../lib/utils";
 
+let loginData;
+
 export const actions = {
 
     login: async ({ request }) => {
         const data = await request.formData();
 
-        const loginData = {
+        loginData = {
             email: data.get('email'),
             password: data.get('password')
         }
+
 
         const { formData, errors } = await validateData(loginData, loginSchema);
 
@@ -21,7 +24,11 @@ export const actions = {
                 success: false
             });
         } else {
-            return { success: true }
+            return { isLast: data.isLast ?? true };
         }
+    },
+
+    example: async () => {
+        console.log("login form data:", loginData)
     }
 }

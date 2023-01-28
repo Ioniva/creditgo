@@ -6,7 +6,7 @@
 	import { getContext } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { writable } from 'svelte/store';
-	import { enhance } from '$app/forms';
+	import { enhance, applyAction } from '$app/forms';
 
 	// Props
 	/** Indicates the step index value. Should start with 0 (zero) */
@@ -15,8 +15,9 @@
 	export let locked = false;
 	/** SSR form action call method */
 	export let action = '?';
+	export let method = 'POST';
 
-	export let form;
+	// export let form;
 
 	// Base Classes
 	const cBase = 'grid grid-cols-[32px_1fr] gap-4';
@@ -27,8 +28,6 @@
 	const cDrawer = 'ml-1 space-y-4';
 	const cNav = 'flex items-center space-x-2';
 	// Context
-	const success = getContext('success');
-	$: reactiveSuccess = $success;
 	export let dispatch = getContext('dispatch');
 	export let active = getContext('active');
 	export let length = getContext('length');
@@ -45,30 +44,7 @@
 	export let buttonTextBack = getContext('buttonTextBack');
 	export let buttonTextNext = getContext('buttonTextNext');
 	export let buttonTextComplete = getContext('buttonTextComplete');
-	// Step Handlers
-	function stepPrev() {
-		active.set($active - 1);
-		/** @event {{ event }} previous - Fires when the component the Next step button is pressed.  */
-		dispatch('previous', {});
-	}
 
-	function stepNext() {
-		// console.log('Valir del active -> ' + $active);
-		// console.log('Estoy dentro de next -> ' + success)
-		// console.log($success)
-		if ($success === true) {
-			active.set($active + 1);
-			/** @event {{ event }} next - Fires when the component the Previous step button is pressed.  */
-			dispatch('next', {});
-		}
-	}
-	function onComplete() {
-		/** @event {{ event }} complete - Fires when the component the Complete button is pressed.  */
-		dispatch('complete', {});
-	}
-	function stepToIndex() {
-		if (isClickable) active.set(index);
-	}
 	// Reactive
 	$: isLastItem = index === length - 1;
 	// clickable & cursor logic
@@ -90,6 +66,43 @@
 	$: classesDrawer = `${cDrawer} ${classesDrawerPadding}`;
 	// Content Nav
 	$: classesNav = `${cNav}`;
+
+	// Step Handlers
+	function stepPrev() {
+		active.set($active - 1);
+		/** @event {{ event }} previous - Fires when the component the Next step button is pressed.  */
+		dispatch('previous', {});
+	}
+
+	function stepNext() {
+		active.set($active + 1);
+		/** @event {{ event }} next - Fires when the component the Previous step button is pressed.  */
+		dispatch('next', {});
+	}
+
+	function onComplete() {
+		console.log('Is completed!');
+		/** @event {{ event }} complete - Fires when the component the Complete button is pressed.  */
+		dispatch('complete', {});
+	}
+
+	function stepToIndex() {
+		if (isClickable) active.set(index);
+	}
+
+	function handleSubmit() {
+		return async ({ result, update }) => {
+			if (result.type === 'failure') {
+				await applyAction(result);
+			}
+
+			if (result.type === 'success') {
+				await applyAction(result);
+				stepNext();
+			}
+		};
+	}
+	$: visible = index === $active;
 </script>
 
 <div class="step {classesBase}" data-testid="step">
@@ -129,38 +142,49 @@
 			on:click={stepToIndex}
 			on:keypress
 		>
-			<slot name="header"><h4>Step {index + 1}</h4></slot>
+			<slot name="header">
+				<h4>Step {index + 1}</h4>
+			</slot>
 		</header>
-		{#if index === $active}
-			<div class="step-body space-y-4" transition:slide|local={{ duration }}>
-				<form {action} method="POST" use:enhance>
-					<!-- Slot: Default -->
-					<slot name="form" />
+		<!-- {#if index === $active} -->
+		<div
+			class="step-body space-y-4 {visible ? '' : 'hidden'}"
+			transition:slide|local={{ duration }}
+		>
+			<form {action} {method} use:enhance={handleSubmit}>
+				<slot name="form" />
 
-					<!-- Nav -->
-					{#if index !== 0}
-						<button type="button" class={buttonClassesBack} on:click={stepPrev}>
-							{@html buttonTextBack}
-						</button>
-					{/if}
+				<input type="hidden" name="isLast" value={isLastItem} />
 
-					{#if $active + 1 < length}
-						<button type="submit" class={buttonClassesNext} on:click={stepNext} disabled={locked}>
-							{@html buttonTextNext}
-						</button>
-					{:else}
-						<!-- {@html buttonTextComplete} -->
-						<button
-							type="button"
-							class={buttonClassesComplete}
-							on:click={onComplete}
-							disabled={locked}
-						>
-							{@html buttonTextComplete}
-						</button>
-					{/if}
-				</form>
-			</div>
-		{/if}
+				<!-- Nav -->
+				{#if index !== 0}
+					<button type="button" class={buttonClassesBack} on:click={stepPrev}>
+						{@html buttonTextBack}
+					</button>
+				{/if}
+
+				{#if $active + 1 < length}
+					<button type="submit" class={buttonClassesNext} disabled={locked}>
+						{@html buttonTextNext}
+					</button>
+				{:else}
+					<button
+						type="submit"
+						class={buttonClassesComplete}
+						on:click={onComplete}
+						disabled={locked}
+					>
+						{@html buttonTextComplete}
+					</button>
+				{/if}
+			</form>
+		</div>
+		<!-- {/if} -->
 	</div>
 </div>
+
+<style>
+	.hidden {
+		display: none;
+	}
+</style>
