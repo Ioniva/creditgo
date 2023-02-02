@@ -3,7 +3,11 @@
 	import '@skeletonlabs/skeleton/styles/all.css';
 	import '../app.postcss';
 	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
+	import { Modal } from '@skeletonlabs/skeleton';
 </script>
+
+<Modal  regionBackdrop="bg-surface-backdrop-token backdrop-blur-sm"/>
+
 
 <!-- App Shell -->
 <AppShell slotSidebarLeft="bg-surface-500/5 w-56 p-4">
