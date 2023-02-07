@@ -1,6 +1,6 @@
 <script>
 	import { ProgressBar } from '@skeletonlabs/skeleton';
-	import Input from '../ui-library/Input/Input.svelte';
+	import Input from '../../ui-library/Input/Input.svelte';
 	export let form;
 </script>
 

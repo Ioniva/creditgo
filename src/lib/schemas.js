@@ -1,97 +1,76 @@
-import { string, z } from 'zod';
+import { z } from 'zod';
+import banks from './components/content/banks.json'
 
-export const loginSchema = z.object({
-    email: z.string({ required_error: 'Email is required' }).email({ message: 'Email must be a valid email' }),
-    password: z.string({ required_error: 'Password is required' })
+const accountSchema = z.object({
+    cedula: z.string()
+        .length(11, { message: 'Must be exactyly 10 characters long' })
+        .regex(/^\d{6}[-]\d{4}$/, { message: 'Invalid format. For example, 123456-7890' }),
+    email: z.string().email(),
+    repeatEmail: z.string().email(),
+    password: z.string().min(9),
+    repeatPassword: z.string().min(9),
+    phone: z.string().min(10).max(15),
+    repeatPhone: z.string().min(10).max(15),
+    meetplace: z.enum(['facebook', 'google', 'referidos', 'otros']).optional(),
+    termCondition: z.boolean().refine((flag) => flag === true, { message: 'Terms conditions are required' }),
+    personalInfo: z.boolean().refine((flag) => flag === true, { message: 'Authorization is required' })
 })
+    // TODO: Mostrar estos errores al cliente
+    // TODO: Mandar al cliente tanto los fieldErrors como formErrors
+    .refine((data) => data.password === data.repeatPassword, { message: { confirmPassword: 'Password dont match' } })
+    .refine((data) => data.email === data.repeatEmail, { message: 'Email does not match' })
+    .refine((data) => data.phone === data.repeatPhone, { message: 'Phone number does not match' })
 
-export const profileSchema = z.object({
-    // TODO: Investigar una API para verificar los números
-    phone: z.number({ required_error: 'Phone is required' })
-        .min(10, { message: 'Must be 10 or more characters long' })
-        .max(15, { message: 'Must be 15 or fewer characters long' }),
 
-    name: z.string({ required_error: 'First name is required' })
-        .max(140, { message: 'Must be 140 or fewer characters long' }),
-    surname: z.string({ required_error: 'Last name is required' })
-        .max(140, { message: 'Must be 140 or fewer characters long' }),
+const profileSchema = z.object({
+    name: z.string().min(1).max(140),
+    surname: z.string().min(1).max(140),
     // TODO: Verificar si es mayor de edad
-    birthDate: z.date({ required_error: 'Please select a date', invalid_type_error: 'That is not a date!' })
-        .min(new Date('1950-01-01'), { message: 'Too old' })
-        .max(new Date(), { message: 'Too young!' }),
-    gender: z.enum(['male', 'female', 'other'], { required_error: 'Gender is required' }),
+    birthDate: z.date(),
+    genre: z.enum(['male', 'female', 'other']),
     // TODO: Utilizar los valores de la API
-    maritalStatus: z.enum(['S', 'C', 'L', 'D', 'V']),
-    children: z.number({ message: 'Must be a valid number' })
-        .nonnegative({ message: 'Must be 0 or larger' }),
-    department: z.string({ required_error: 'Department is required' })
-        .max(255, { message: 'Must be 255 or fewer characters long' }),
-    city: z.string({ required_error: 'City is required' })
-        .max(255, { message: 'Must be 255 or fewer characters long' }),
-    zip: z.string({ required_error: 'ZIP code is required' })
-        .length(6, { message: 'Must be exactly 6 characters long' })
-        .regex(/^\d{5}$/),
+    maritalStatus: z.enum(['S', 'U', 'C', 'D', 'V']),
+    children: z.number().nonnegative(),
+    department: z.string().min(1).max(255),
+    city: z.string().min(1).max(255),
+    zip: z.string().length(6).regex(/^\d{6}$/),
+    // TODO: Añadir una API u otro mecanismo para actualizar automáticamente
+    // NOTE: Utilizar native enums
+    dispatchPlace: z.enum(['Bogotá', 'Medellín', 'Cali', 'Barranquilla']),
+    // TODO: Definir una formato
+    dispatchDate: z.date()
+})
+
+const supplementSchema = z.object({
+    // TODO: Utilizar los valores de la API
+    // ...Utilizar native enums
+    bankName: z.enum(banks),
+    bankType: z.enum(['Ahorro', 'Corriente']),
+    bankNumber: z.string().length(7).regex(/^\d{7}$/),
+    holder: z.string().min(1).max(16),
+    employeeType: z.enum(['Empleado', 'Independiente', 'Pensionado', 'Desmpleado', 'Prestador']),
+    netMonthlyIncome: z.string().min(1),
+    netMonthlyExpense: z.string(),
+    additionalIncome: z.string()
+})
+
+const referenceSchema = z.object({
+    employeeType: z.enum(['Empleado', 'Independiente', 'Pensionado', 'Desmpleado', 'Prestador']),
     // primeros seis  : fecha de nacimiento en el formato 'ddmmyy'
     // últimos cuatro : números aleatorios asignados por el gobierno
-    cedula: string({ required_error: 'Cedula is required' })
-        .length(10, { message: 'Must be exactyly 10 characters long' })
-        .regex(/^\d{6}[-]\d{4}$/),
+    cedula: z.string()
+        .length(11, { message: 'Must be exactyly 10 characters long' })
+        .regex(/^\d{6}[-]\d{4}$/, { message: 'Invalid format. For example, 123456-7890' }),
+    name: z.string().min(1).max(140),
+    surname: z.string().min(1).max(140),
+    phone: z.string().min(10).max(15),
     // TODO: Añadir una API u otro mecanismo para actualizar automáticamente
     // ...Utilizar native enums
     dispatchPlace: z.enum(['Bogotá', 'Medellín', 'Cali', 'Barranquilla']),
-    dispatchDate: z.date({ required_error: 'Please select a date', invalid_type_error: 'That is not a date!' })
+    dispatchDate: z.date(),
+    department: z.string().min(1).max(255),
+    city: z.string().min(1).max(255),
+    zip: z.string().length(6).regex(/^\d{6}$/)
 })
 
-// ...Utilizar native enums
-const meetplaceSchema = z.array(z.enum(['facebook', 'google', 'referidos', 'otros']));
-
-const agreementSchema = z.object({
-    termCondition: z.boolean(),
-    personalInfo: z.boolean()
-})
-
-const bankAccountSchema = z.object({
-    // TODO: Utilizar los valores de la API
-    // ...Utilizar native enums
-    bankName: z.enum(['Helm', 'Skandia', 'Citybank', 'Confiar', 'BBVA']),
-    bankType: z.enum(['ahorro', 'corriente'], { required_error: 'Bank type is required' }),
-    bankNumber: z.string({ required_error: 'Bank number is required' })
-        .length(7, { message: 'Must be exactyly 7 characters long' })
-        .regex(/^\d{7}$/),
-    holder: z.string({ required_error: 'Holder name is required' })
-        .max(16, { message: 'Must be 16 or fewer characters long' })
-})
-
-const financialSchema = z.object({
-    employeeType: z.enum(['empleado', 'independiente', 'pensionado', 'desmpleado', 'prestador'], { required_error: 'Employee type is required' }),
-    // netMonthlyIncome: z.regex(/^\d{1,18}(,\d{0,4})?$/, { required_error: 'Monthly income is required' }),
-    // netMonthlyExpense: z.regex(/^\d{1,18}(,\d{0,4})?$/),
-    // additionalIncome: z.regex(/^\d{1,18}(,\d{0,4})?$/)
-})
-
-const guarantorSchema = z.object({
-    employeeType: z.enum(['empleado', 'independiente', 'pensionado', 'desmpleado', 'prestador'], { required_error: 'Employee type is required' }),
-    // primeros seis  : fecha de nacimiento en el formato 'ddmmyy'
-    // últimos cuatro : números aleatorios asignados por el gobierno
-    cedula: string({ required_error: 'Cedula is required' })
-        .length(10, { message: 'Must be exactyly 10 characters long' })
-        .regex(/^\d{6}[-]\d{4}$/),
-    name: z.string({ required_error: 'First name is required' })
-        .max(140, { message: 'Must be 140 or fewer characters long' }),
-    surname: z.string({ required_error: 'Last name is required' })
-        .max(140, { message: 'Must be 140 or fewer characters long' }),
-    phone: z.number({ required_error: 'Phone is required' })
-        .min(10, { message: 'Must be 10 or more characters long' })
-        .max(15, { message: 'Must be 15 or fewer characters long' }),
-    // TODO: Añadir una API u otro mecanismo para actualizar automáticamente
-    // ...Utilizar native enums
-    dispatchPlace: z.enum(['Bogotá', 'Medellín', 'Cali', 'Barranquilla']),
-    dispatchDate: z.date({ required_error: 'Please select a date', invalid_type_error: 'That is not a date!' }),
-    department: z.string({ required_error: 'Department is required' })
-        .max(255, { message: 'Must be 255 or fewer characters long' }),
-    city: z.string({ required_error: 'City is required' })
-        .max(255, { message: 'Must be 255 or fewer characters long' }),
-    zip: z.string({ required_error: 'ZIP code is required' })
-        .length(6, { message: 'Must be exactly 6 characters long' })
-        .regex(/^\d{5}$/),
-})
+export { accountSchema, profileSchema, supplementSchema, referenceSchema };

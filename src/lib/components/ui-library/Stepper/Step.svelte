@@ -75,13 +75,13 @@
 	}
 
 	function stepNext() {
+		console.log('Next button');
 		active.set($active + 1);
 		/** @event {{ event }} next - Fires when the component the Previous step button is pressed.  */
 		dispatch('next', {});
 	}
 
 	function onComplete() {
-		console.log('Is completed!');
 		/** @event {{ event }} complete - Fires when the component the Complete button is pressed.  */
 		dispatch('complete', {});
 	}
@@ -92,6 +92,7 @@
 
 	function handleSubmit() {
 		return async ({ result, update }) => {
+			console.log(result);
 			if (result.type === 'failure') {
 				await applyAction(result);
 			}

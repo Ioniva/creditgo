@@ -3,34 +3,34 @@
 
 	import Step from '../../lib/components/ui-library/Stepper/Step.svelte';
 	import Stepper from '../../lib/components/ui-library/Stepper/Stepper.svelte';
-	import Input from '../../lib/components/ui-library/Input/Input.svelte';
-	import Account from './Account.svelte';
+	// import Account from './Account.svelte';
+	// import Personal from '../../lib/components/register/Personal.svelte';
+	// import AdditionalData from '../../lib/components/register/old/AdditionalData.svelte';
+	import ReferenceData from '../../lib/components/register/old/ReferenceData.svelte';
 
 	export let active = writable(0);
 	export let form;
 
-	const onComplete = () => {
-		// console.log(form);
-	};
+	const onComplete = () => alert('Se ha registrado correctamente!');
 </script>
 
 <div class="container mx-auto">
 	<h1 class="my-8">Register page</h1>
 	<Stepper {active} length={2} on:complete={onComplete}>
-		<Step index={0} action="?/login" method="POST" duration="3000">
+		<Step index={0} action="?/handleAccount" method="POST">
 			<svelte:fragment slot="header">
-				<span class="text-3xl font-bold">Datos de tu cuenta</span>
+				<span class="text-3xl font-bold">Datos adicionales</span>
 			</svelte:fragment>
-
 			<svelte:fragment slot="form">
-				<Account errors={form?.errors} />
+				<ReferenceData />
+				<!-- <Personal errors={form?.errors} /> -->
+				<!-- <Account errors={form?.errors} /> -->
 			</svelte:fragment>
 		</Step>
-		<Step index={1} action="?/example" method="POST">
+		<Step index={1} action="?/profile" method="POST">
 			<svelte:fragment slot="header">
 				<span class="text-3xl font-bold">Datos personales</span>
 			</svelte:fragment>
-
 			<svelte:fragment slot="form">
 				<h2>Form 2</h2>
 			</svelte:fragment>

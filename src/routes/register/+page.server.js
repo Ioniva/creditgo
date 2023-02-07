@@ -1,30 +1,106 @@
-let submissions = [];
-
 import { fail } from '@sveltejs/kit';
-import { loginSchema } from "../../lib/schemas";
+import { accountSchema, profileSchema, referenceSchema, supplementSchema } from "../../lib/schemas";
 import { validateData } from "../../lib/utils";
 
+let loginData = Object.create(null, {});
+let profileData = Object.create(null, {});
+let agreementData = Object.create(null, {});
+
+let meetplaceData = '';
+
+let financialData = Object.create(null, {});
+let bankAccountData = Object.create(null, {});
+
+let guarantorData = Object.create(null, {});
+
 export const actions = {
+    handleAccount: async ({ request }) => {
+        let { isLast, data } = await extractData(request);
 
-    account: async ({ request }) => {
-        const data = await request.formData();
+        data = { ...data, termCondition: Boolean(data.termCondition === 'on'), personalInfo: Boolean(data.personalInfo === 'on') }
 
-        const accountData = {
-            email: data.get('email'),
-            password: data.get('password')
+        loginData = { email: data.email, password: data.password };
+        profileData = { ...profileData, phone: data.phone, cedula: data.cedula }
+        meetplaceData = data.meetplace;
+        agreementData = { termCondition: data.termCondition, personalInfo: data.personalInfo }
+
+        return await handleValidation(data, accountSchema, Boolean(isLast));
+    },
+
+    handleProfile: async ({ request }) => {
+        let { isLast, data } = await extractData(request);
+
+        const parsedDispatchDate = new Date(Date.parse(data.dispatchDate));
+        const parsedBirthDate = new Date(Date.parse(data.birthDate));
+
+        data = {
+            ...data,
+            dispatchDate: parsedDispatchDate,
+            birthDate: parsedBirthDate,
+            children: Number(data.children)
         }
 
-        const { formData, errors } = await validateData(accountData, loginSchema);
+        // TODO: Posible refactorizacion: añadir la cedula y telefono a esta parte del formulario
+        profileData = { ...profileData, data }
 
-        if (errors) {
-            return fail(400, {
-                data: formData,
-                errors: errors.fieldErrors,
-                success: false
-            });
+        return await handleValidation(data, profileSchema, Boolean(isLast));
+    },
+
+    handleSupplement: async ({ request }) => {
+        let { isLast, data } = await extractData(request);
+
+
+        bankAccountData = {
+            bankName: data.bankName,
+            bankType: data.bankType,
+            bankNumber: data.bankNumber,
+            holder: data.holderName
         }
-        submissions.push(accountData);
-        return { success: false };
 
+        financialData = {
+            employeeType: data.employeeType,
+            netMonthlyIncome: data.netMonthlyIncome,
+            netMonthlyExpense: data.netMonthlyExpense,
+            additionalIncome: data.additionalIncome
+        }
+
+        return await handleValidation(data, supplementSchema, Boolean(isLast));
+    },
+
+    handleReference: async ({ request }) => {
+        let { isLast, data } = await extractData(request);
+
+
+        const parsedDispatchDate = new Date(Date.parse(data.dispatchDate));
+        console.log(parsedDispatchDate)
+        data = {
+            ...data,
+            dispatchDate: parsedDispatchDate
+        }
+
+        return await handleValidation(data, referenceSchema, Boolean(isLast));
     }
+}
+
+const extractData = async (request) => {
+    const values = await request.formData();
+    const { isLast, ...data } = Object.fromEntries(values.entries());
+    return { isLast, data };
+}
+
+const handleValidation = async (data, schema, isLast) => {
+
+    console.log('data:', data);
+
+    const { errors } = await validateData(data, schema);
+
+    console.log('errors: ', errors);
+
+    if (errors) {
+        return fail(400, {
+            errors: errors.fieldErrors
+        });
+    }
+
+    if (isLast) console.log('YEAH! Es el último paso.')
 }
