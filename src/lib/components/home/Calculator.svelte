@@ -1,6 +1,6 @@
 <script>
 	import { RadioGroup, RadioItem } from "@skeletonlabs/skeleton";
-	import RoundRangeSlider from "../RoundRangeSlider.svelte";
+	import RoundRangeSlider from "../ui-library/Slider/RoundRangeSlider.svelte";
 
     let value= 0;
 </script>
