@@ -1,4 +1,5 @@
 <script>
+	import Temporizador from "../../lib/components/temporizador/Temporizador.svelte";
 	export let form;
 
 	const formData = {
@@ -61,4 +62,5 @@
 			<button class="btn btn-filled-primary w-72">Submit Form</button>
 		</div>
 	</form>
+	<Temporizador dateDatabase='2023-02-15 12:00' resultado="there are no debts pending"></Temporizador>
 </div>
