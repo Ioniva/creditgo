@@ -3,10 +3,10 @@
 	import '@skeletonlabs/skeleton/styles/all.css';
 	import '../app.postcss';
 	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
-	import { Modal } from '@skeletonlabs/skeleton';
+
 </script>
 
-<Modal  regionBackdrop="bg-surface-backdrop-token backdrop-blur-sm"/>
+
 
 
 <!-- App Shell -->
@@ -28,7 +28,7 @@
                     <a class="btn btn-base" href="/">Inicio</a>
                     <a class="btn btn-base" href="/faq">Preguntas frecuentes</a>
                     <a class="btn btn-base" href="/interest-rates">Tasas de interes</a>
-                    <a class="btn btn-base" href="/">Progresión</a>
+                    <a class="btn btn-base" href="/temporizador">Progresión</a>
                 </div>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
