@@ -143,10 +143,10 @@
 	<div>
 		<p class="text-base italic mb-4">¿Dónde nos conociste?</p>
 		<div class="flex flex-row">
-			<Input type="radio" id="meetplace" value="facebook" label="Facebook" flex />
-			<Input type="radio" id="meetplace" value="google" label="Google" flex />
-			<Input type="radio" id="meetplace" value="referidos" label="Referidos" flex />
-			<Input type="radio" id="meetplace" value="otros" label="Otros" flex />
+			<Input type="radio" id="meetPlace" value="facebook" label="Facebook" flex />
+			<Input type="radio" id="meetPlace" value="google" label="Google" flex />
+			<Input type="radio" id="meetPlace" value="referidos" label="Referidos" flex />
+			<Input type="radio" id="meetPlace" value="otros" label="Otros" flex />
 		</div>
 		<!-- error -->
 		{#if errors?.meetplace}
