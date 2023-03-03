@@ -1,39 +1,43 @@
-import { fail } from '@sveltejs/kit';
-import { accountSchema, profileSchema, referenceSchema, supplementSchema } from "../../lib/schemas";
-import { validateData } from "../../lib/utils";
+import {fail} from '@sveltejs/kit';
+import {accountSchema, profileSchema, referenceSchema, supplementSchema} from "../../lib/schemas";
+import {validateData} from "../../lib/utils";
+// import LoginApiCommand from '../../lib/commands/LoginApiCommand';
+// import PersonalApiCommand from '../../lib/commands/PersonalApiCommand';
 
-let loginData = Object.create(null, {});
-let profileData = Object.create(null, {});
-let agreementData = Object.create(null, {});
-
-let meetplaceData = '';
-
-let financialData = Object.create(null, {});
-let bankAccountData = Object.create(null, {});
-
-let guarantorData = Object.create(null, {});
+const state = {
+    loginData: {},
+    profileData: {},
+    agreementData: {},
+    meetplaceData: '',
+    financialData: {},
+    bankAccountData: {},
+    guarantorData: {}
+};
 
 export const actions = {
-    handleAccount: async ({ request }) => {
-        let { isLast, data } = await extractData(request);
+    handleAccount: async ({request}) => {
+        let {isLast, data} = await extractData(request);
 
-        data = { ...data, termCondition: Boolean(data.termCondition === 'on'), personalInfo: Boolean(data.personalInfo === 'on') }
+        state.loginData = {email: data.email, password: data.password};
+        state.profileData = {...state.profileData, phone: data.phone, cedula: data.cedula}
+        state.meetplaceData = data.meetplace;
+        state.agreementData = {termCondition: data.termCondition, personalInfo: data.personalInfo}
 
-        loginData = { email: data.email, password: data.password };
-        profileData = { ...profileData, phone: data.phone, cedula: data.cedula }
-        meetplaceData = data.meetplace;
-        agreementData = { termCondition: data.termCondition, personalInfo: data.personalInfo }
-
-        return await handleValidation(data, accountSchema, Boolean(isLast));
+        return await handleValidation({
+            ...data,
+            termCondition: Boolean(data.termCondition === 'on'),
+            personalInfo: Boolean(data.personalInfo === 'on')
+        }, accountSchema, isLast);
     },
 
-    handleProfile: async ({ request }) => {
-        let { isLast, data } = await extractData(request);
+    handleProfile: async ({request}) => {
+        let {isLast, data} = await extractData(request);
 
         const parsedDispatchDate = new Date(Date.parse(data.dispatchDate));
         const parsedBirthDate = new Date(Date.parse(data.birthDate));
 
-        data = {
+        state.profileData = {
+            ...state.profileData,
             ...data,
             dispatchDate: parsedDispatchDate,
             birthDate: parsedBirthDate,
@@ -41,60 +45,49 @@ export const actions = {
         }
 
         // TODO: Posible refactorizacion: añadir la cedula y telefono a esta parte del formulario
-        profileData = { ...profileData, data }
-
-        return await handleValidation(data, profileSchema, Boolean(isLast));
+        return await handleValidation(state.profileData, profileSchema, isLast);
     },
 
-    handleSupplement: async ({ request }) => {
-        let { isLast, data } = await extractData(request);
+    handleSupplement: async ({request}) => {
+        let {isLast, data} = await extractData(request);
 
-
-        bankAccountData = {
+        state.bankAccountData = {
             bankName: data.bankName,
             bankType: data.bankType,
             bankNumber: data.bankNumber,
             holder: data.holderName
         }
 
-        financialData = {
+        state.financialData = {
             employeeType: data.employeeType,
             netMonthlyIncome: data.netMonthlyIncome,
             netMonthlyExpense: data.netMonthlyExpense,
             additionalIncome: data.additionalIncome
         }
 
-        return await handleValidation(data, supplementSchema, Boolean(isLast));
+        return await handleValidation(data, supplementSchema, isLast);
     },
 
-    handleReference: async ({ request }) => {
-        let { isLast, data } = await extractData(request);
-
+    handleReference: async ({request}) => {
+        let {isLast, data} = await extractData(request);
 
         const parsedDispatchDate = new Date(Date.parse(data.dispatchDate));
-        console.log(parsedDispatchDate)
-        data = {
+
+        return await handleValidation({
             ...data,
             dispatchDate: parsedDispatchDate
-        }
-
-        return await handleValidation(data, referenceSchema, Boolean(isLast));
+        }, referenceSchema, isLast);
     }
 }
 
 const extractData = async (request) => {
     const values = await request.formData();
-    const { isLast, ...data } = Object.fromEntries(values.entries());
-    return { isLast, data };
+    const {isLast, ...data} = Object.fromEntries(values.entries());
+    return {isLast, data};
 }
 
 const handleValidation = async (data, schema, isLast) => {
-
-    console.log('data:', data);
-
-    const { errors } = await validateData(data, schema);
-
-    console.log('errors: ', errors);
+    const {errors} = await validateData(data, schema);
 
     if (errors) {
         return fail(400, {
@@ -102,5 +95,26 @@ const handleValidation = async (data, schema, isLast) => {
         });
     }
 
-    if (isLast) console.log('YEAH! Es el último paso.')
+    console.log(data);
+
+    // if (isLast) {
+    //     submitForm();
+    // }
 }
+
+// const submitForm = () => {
+
+//     const loginApiCommand = new LoginApiCommand(state.loginData);
+//     // const personalApiCommand = new PersonalApiCommand(state.personalData);
+
+//     Promise.all([loginApiCommand.execute()])
+//         .then(result => {
+//             console.log("All API calls succeeded:", result);
+//             return result;
+//         })
+//         .catch(error => {
+//             loginApiCommand.undo();
+//             // personalApiCommand.undo();
+//             throw error;
+//         })
+// }
