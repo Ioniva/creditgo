@@ -15,7 +15,7 @@
 					<tr>
 						<td class="w-1/3 font-bold text-lg">Interés Moratorio:</td>
 						<td
-							>asa Máxima Legal Permitida por la Superintendencia Financiera de Colombia. Consultar
+							>Tasa Máxima Legal Permitida por la Superintendencia Financiera de Colombia. Consultar
 							en el siguiente link: https://www.superfinanciera.gov.co</td
 						>
 					</tr>
