@@ -7,7 +7,7 @@
 	import SvgIcon from '../../lib/components/ui-library/SvgIcon/SvgIcon.svelte';
 
 	// local Store
-	let storeCategory = writable('home');
+	let storeCategory = writable('dashboard');
 
 	onMount(() => {
 		storeCategory.subscribe((url) => {
@@ -31,17 +31,20 @@
 			<svelte:fragment slot="lead">
 				<div class="p-4 text-center">
 					<!-- <Avatar src="https://i.pravatar.cc/" width="w-full" rounded="rounded-3xl" /> -->
-					<Avatar initials="JP" width="w-full" rounded="rounded-3xl" />
-					<p class="p-1">Juan Perez</p>
+					<Avatar initials="A" width="w-full" rounded="rounded-3xl" />
+					<p class="p-1">Admin</p>
 				</div>
 			</svelte:fragment>
 
 			<hr class="opacity-30" />
-			<AppRailTile label="Home" value={'home'}>
+			<AppRailTile label="Dashboard" value={'dashboard'}>
 				<SvgIcon name="book" width="w-6" height="h-6" />
 			</AppRailTile>
 			<hr class="opacity-30" />
-			<AppRailTile label="Order" value={'order'}>
+			<AppRailTile label="Transacciones" value={'transactions'}>
+				<SvgIcon name="cubes" width="w-6" height="h-6" />
+			</AppRailTile>
+			<AppRailTile label="Clientes" value={'clients'}>
 				<SvgIcon name="cubes" width="w-6" height="h-6" />
 			</AppRailTile>
 		</AppRail>
