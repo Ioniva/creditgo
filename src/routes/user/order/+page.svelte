@@ -16,7 +16,7 @@
 </script>
 
 <div
-	class="mx-auto h-full w-1/2 container text-center flex justify-center items-center border-solid border-8 border-black border-indigo-500/40"
+	class="mx-auto h-full w-1/2 container text-center flex justify-center items-center border-solid border-8 border-black border-indigo-500/40 !bg-secondary-500/5"
 >
 	<form action="">
 		<div class="w-full my-8">

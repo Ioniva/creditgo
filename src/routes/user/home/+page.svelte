@@ -26,22 +26,22 @@
 	);
 </script>
 
-<div class="h-1/3 flex justify-center items-center">
+<div class="w-full lg:flex items-center text-center">
 	<div
-		class="w-1/2 mx-8 p-10 border-solid border-2 border-black text-center bg-blue-400 bg-opacity-25"
+		class="lg:w-1/2 w-auto m-8 p-10 border-solid border-2 border-black bg-blue-400 bg-opacity-25"
 	>
 		<p class="unstyled text-3xl">Cupo disponible</p>
 		<p class="unstyled text-5xl">$ 300</p>
 	</div>
 	<div
-		class="w-1/2 mx-8 p-10 border-solid border-2 border-black text-center bg-blue-400 bg-opacity-25"
+		class="lg:w-1/2 w-auto m-8 p-10 border-solid border-2 border-black bg-blue-400 bg-opacity-25"
 	>
 		<p class="unstyled text-3xl">Pagar antes de...</p>
 		<Temporizador resultado="No hay ningun cupo" />
 	</div>
 </div>
 
-<div class="mx-8">
+<div class="m-8">
 	<Table
 		source={{ head: sourceHeaders, body: sourceBodySliced }}
 		class="border-solid border-2 border-black mb-4"
