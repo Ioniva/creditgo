@@ -1,19 +1,18 @@
 <script>
-    import {ProgressRadial, RadioGroup, RadioItem, RangeSlider} from '@skeletonlabs/skeleton';
-    import {writable} from "svelte/store";
+	import { ProgressRadial, RadioGroup, RadioItem, RangeSlider } from '@skeletonlabs/skeleton';
+	import { writable } from 'svelte/store';
 
-    let daysToAdd = writable(0);
-    let value = 0;
-	$: interest = 2.5 * value / 100;
+	let daysToAdd = writable(0);
+	let value = 0;
+	$: interest = (2.5 * value) / 100;
 	let insurance = 7;
 	let maintenance = 11;
 	$: total = interest + insurance + maintenance;
 
-    const currentDate = new Date();
-    $: futureDate = new Date(currentDate.getTime() + ($daysToAdd * 24 * 60 * 60 * 1000));
-    const options = {year: 'numeric', month: '2-digit', day: '2-digit'};
-    $: formattedDate = futureDate.toLocaleDateString('es-CO', options);
-
+	const currentDate = new Date();
+	$: futureDate = new Date(currentDate.getTime() + $daysToAdd * 24 * 60 * 60 * 1000);
+	const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+	$: formattedDate = futureDate.toLocaleDateString('es-CO', options);
 </script>
 
 <section class="container mx-auto h-1/2 flex">
@@ -68,11 +67,11 @@
 				<!-- TODO: cambiar el titulo a un <p></p>  -->
 				<h3 class="text-center my-6">1. ¿Cúanto dinero necesitas?</h3>
 				<ProgressRadial class="w-1/4 mx-auto my-6" value={1000}>$ {value}</ProgressRadial>
-                <div class="flex mx-auto">
-                    <span>min</span>
-                    <RangeSlider class="w-full mx-4" max={1000} step={50} bind:value />
-                    <span>max</span>
-                </div>
+				<div class="flex mx-auto">
+					<span>min</span>
+					<RangeSlider class="w-full mx-4" max={1000} step={50} bind:value />
+					<span>max</span>
+				</div>
 				<!-- <RoundRangeSlider bind:value max="1000" step="50" label="$" textPosition="before" /> -->
 			</div>
 			<div>
@@ -90,10 +89,8 @@
 					{/if}
 					{#if value >= 801 && value <= 1000}
 						<RadioItem value={90}>90 días</RadioItem>
-                    {/if}
-
+					{/if}
 				</RadioGroup>
-				<h2>Dias a pagar: {$daysToAdd}</h2>
 			</div>
 		</div>
 		<!-- TODO: Cambiarlo por el <Divider> de skeleton -->
