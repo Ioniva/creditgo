@@ -13,6 +13,19 @@ class FetchUtil {
         return response.json();
     }
 
+    static async get(url) {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        });
+        if (!response.ok) {
+            throw new Error(`Fetch error: ${response.status}`);
+        }
+        return response.json();
+    }
+
     static async post(url, data) {
         const response = await fetch(url, {
             method: "POST",
