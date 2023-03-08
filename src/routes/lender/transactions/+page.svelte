@@ -1,6 +1,6 @@
 <script>
+	import { toastStore } from '@skeletonlabs/skeleton';
 	import {
-		Avatar,
 		createDataTableStore,
 		dataTableHandler,
 		modalStore,
@@ -9,13 +9,19 @@
 		tableInteraction
 	} from '@skeletonlabs/skeleton';
 
+	import ClientDataPreview from '../../../lib/components/modals/ClientDataPreview.svelte';
+	import SelectReasonModal from '../../../lib/components/modals/SelectReasonModal.svelte';
+
 	// Local
+	// TODO: fetch source data from API
 	const sourceData = [
-		{ id: 1, title: 'Hydrogen', body: 'H' },
-		{ id: 2, title: 'Helium', body: 'He' },
-		{ id: 3, title: 'Lithium', body: 'Li' },
-		{ id: 4, title: 'Beryllium', body: 'Be' },
-		{ id: 5, title: 'Boron', body: 'B' }
+		{
+			uuid: 1,
+			datetime: 'Nov 3 2021-02-28',
+			amount: '$500',
+			names: 'Juan  Carlos',
+			status: 'good'
+		}
 	];
 
 	// Store
@@ -26,24 +32,63 @@
 	});
 	dataTableStore.subscribe((model) => dataTableHandler(model));
 
-	// Manual Selection
-	dataTableStore.select('id', [1]);
-
-	function triggerConfirm(indx) {
-		const confirm = {
-			type: 'confirm',
-			title: 'Please Confirm',
-			body: `
-                Are you sure you wish to proceed?
-                The selected title is:
-                ${indx.title}`,
-			// TRUE if confirm pressed, FALSE if cancel pressed
-			response: (r) => console.log('response:', r),
-			// Optionally override the button text
-			buttonTextCancel: 'Cancel',
-			buttonTextConfirm: 'Confirm'
+	function triggerSuccessToast() {
+		const t = {
+			message: 'Se ha realizado la operación con éxito',
+			preset: 'secondary',
+			autohide: true,
+			timeout: 5000
 		};
-		modalStore.trigger(confirm);
+		toastStore.trigger(t);
+	}
+
+	function triggerErrorToast() {
+		const t = {
+			message: 'Ha ocurrido un error, intente nuevamente',
+			preset: 'error',
+			autohide: true,
+			timeout: 5000
+		};
+		toastStore.trigger(t);
+	}
+
+	function triggerAcceptModal(row) {
+		const modalComponent = {
+			// Pass a reference to your custom component
+			ref: ClientDataPreview,
+			// Add your props as key/value pairs
+			props: { uuid: row.uuid },
+			// Provide default slot content as a template literal
+			slot: '<p>Cannot load the data... Try again later.</p>'
+		};
+		const d = {
+			type: 'component',
+			component: modalComponent,
+			response: (r) => {
+				if (r) console.log('response:', r);
+			}
+		};
+		modalStore.trigger(d);
+	}
+
+	function triggerCancelModal(row) {
+		const modalComponent = {
+			// Pass a reference to your custom component
+			ref: SelectReasonModal,
+			// Add your props as key/value pairs
+			props: { uuid: row.uuid },
+			// Provide default slot content as a template literal
+			slot: '<p>Cannot load the data... Try again later.</p>'
+		};
+		const d = {
+			type: 'component',
+			component: modalComponent,
+			response: (resp) => {
+				if (resp.success) triggerSuccessToast();
+				if (resp.error) triggerErrorToast();
+			}
+		};
+		modalStore.trigger(d);
 	}
 </script>
 
@@ -59,34 +104,31 @@
 			<table class="table table-hover" role="grid" use:tableInteraction use:tableA11y>
                 <thead on:click={(e) => { dataTableStore.sort(e) }} on:keypress>
                     <tr>
-                        <th><input type="checkbox" on:click={(e) => { dataTableStore.selectAll(e.currentTarget.checked) }} /></th>
-                        <th data-sort="id">ID</th>
-                        <th>User</th>
-                        <th data-sort="title">Title</th>
-                        <th data-sort="body">Body</th>
-                        <th class="table-cell-fit"></th>
+                        <th data-sort="datetime">Fecha y hora</th>
+                        <th>Cantidad ($)</th>
+                        <th data-sort="client">Nombres</th>
+                        <th data-sort="status">Estado</th>
+                        <th class="table-cell-fit">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {#each $dataTableStore.filtered as row, rowIndex}
                         <tr class:table-row-checked={row.dataTableChecked} aria-rowindex={rowIndex + 1}>
                             <td role="gridcell" aria-colindex={1} tabindex="0">
-                                <input type="checkbox" bind:checked={row.dataTableChecked} />
+                                {row.datetime}
                             </td>
                             <td role="gridcell" aria-colindex={2} tabindex="0">
-                                <em class="opacity-50">{row.id}</em>
+                                {row.amount}
                             </td>
                             <td role="gridcell" aria-colindex={3} tabindex="0">
-                                <Avatar src={`https://i.pravatar.cc/?img=${row.id}`} width="w-8" />
+                                {row.names}
                             </td>
                             <td role="gridcell" aria-colindex={4} tabindex="0" class="md:!whitespace-normal capitalize">
-                                {row.title}
+                                {row.status}
                             </td>
-                            <td role="gridcell" aria-colindex={5} tabindex="0" class="md:!whitespace-normal">
-                                {row.body}
-                            </td>
-                            <td role="gridcell" aria-colindex={6} tabindex="0" class="table-cell-fit">
-                                <button class="btn btn-ghost-surface btn-sm" on:click={()=>{triggerConfirm(row,rowIndex)}}>Console Log</button>
+                            <td role="gridcell" aria-colindex={5} tabindex="0" class="table-cell-fit">
+                                <button class="btn btn-ghost-surface btn-sm bg-green-800" on:click={()=>{triggerAcceptModal(row)}}>Aceptar</button>
+                                <button class="btn btn-ghost-surface btn-sm bg-red-800" on:click={()=>{triggerCancelModal(row)}}>Rechazar</button>
                             </td>
                         </tr>
                     {/each}
