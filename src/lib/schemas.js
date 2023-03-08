@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import banks from './components/content/banks.json'
+import banks from './content/banks.json'
 
 const accountSchema = z.object({
     cedula: z.string()

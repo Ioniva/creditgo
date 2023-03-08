@@ -2,7 +2,7 @@
 	import Select from '../ui-library/Select/Select.svelte';
 	import SelectItem from '../ui-library/Select/SelectItem.svelte';
 
-	import banks from '../content/banks.json';
+	import banks from '../../content/banks.json';
 	import Input from '../ui-library/Input/Input.svelte';
 
 	export let errors;
