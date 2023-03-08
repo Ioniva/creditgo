@@ -5,9 +5,18 @@
 
 	import { AppRail, AppRailTile, AppShell, Avatar } from '@skeletonlabs/skeleton';
 	import SvgIcon from '../../lib/components/ui-library/SvgIcon/SvgIcon.svelte';
+	import { page } from '$app/stores';
 
 	// local Store
 	let storeCategory = writable('dashboard');
+
+	page.subscribe((p) => {
+		let pathMatch = p.url.pathname.split('/admin/')[1];
+		if (!pathMatch) return;
+		if (['dashboard', 'transactions', 'clients', 'lender'].includes(pathMatch)) {
+			storeCategory.set(pathMatch);
+		}
+	});
 
 	onMount(() => {
 		storeCategory.subscribe((url) => {
@@ -45,6 +54,9 @@
 				<SvgIcon name="cubes" width="w-6" height="h-6" />
 			</AppRailTile>
 			<AppRailTile label="Clientes" value={'clients'}>
+				<SvgIcon name="cubes" width="w-6" height="h-6" />
+			</AppRailTile>
+			<AppRailTile label="Prestador" value={'lender'}>
 				<SvgIcon name="cubes" width="w-6" height="h-6" />
 			</AppRailTile>
 		</AppRail>
