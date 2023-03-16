@@ -29,6 +29,7 @@
 	$: hasLowerCase = lowerCaseRegex.test(password) ? cTextGreen : cTextRed;
 	$: hasNumber = numberRegex.test(password) ? cTextGreen : cTextRed;
 	$: hasSpecial = specialCharRegex.test(password) ? cTextGreen : cTextRed;
+	$: areSamePassword = password && password === repeatPassword ? cTextGreen : cTextRed;
 
 	// check password strength
 	$: {
@@ -91,6 +92,7 @@
 				<li class={hasLowerCase}>- Mínimo una letra minúscula</li>
 				<li class={hasNumber}>- Mínimo un número</li>
 				<li class={hasSpecial}>- Al menos un carácter especial (-+*?¿)</li>
+				<li class={areSamePassword}>- Las contraseñas no coinciden</li>
 			</ul>
 		</div>
 	</div>
