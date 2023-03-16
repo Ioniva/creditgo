@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import banks from './content/banks.json'
+import banks from './content/banks.js'
 
 const accountSchema = z.object({
     cedula: z.string()
@@ -45,17 +45,17 @@ const supplementSchema = z.object({
     // TODO: Utilizar los valores de la API
     // ...Utilizar native enums
     bankName: z.enum(banks),
-    bankType: z.enum(['Ahorro', 'Corriente']),
+    bankType: z.enum(['A', 'C']),
     bankNumber: z.string().length(7).regex(/^\d{7}$/),
-    holder: z.string().min(1).max(16),
-    employeeType: z.enum(['Empleado', 'Independiente', 'Pensionado', 'Desmpleado', 'Prestador']),
+    bankHolder: z.string().min(1).max(16),
+    employeeType: z.enum(['E', 'I', 'P', 'D', 'R']),
     netMonthlyIncome: z.string().min(1),
     netMonthlyExpense: z.string(),
     additionalIncome: z.string()
 })
 
 const referenceSchema = z.object({
-    employeeType: z.enum(['Empleado', 'Independiente', 'Pensionado', 'Desmpleado', 'Prestador']),
+    employeeType: z.enum(['E', 'I', 'P', 'D', 'R']),
     // primeros seis  : fecha de nacimiento en el formato 'ddmmyy'
     // últimos cuatro : números aleatorios asignados por el gobierno
     cedula: z.string()
