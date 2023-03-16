@@ -91,8 +91,7 @@
 	}
 
 	function handleSubmit() {
-		return async ({ result, update }) => {
-			console.log(result);
+		return async ({ result }) => {
 			if (result.type === 'failure') {
 				await applyAction(result);
 			}
