@@ -1,33 +1,42 @@
 import {fail} from '@sveltejs/kit';
-import {accountSchema, profileSchema, referenceSchema, supplementSchema} from "../../lib/schemas";
-import {validateData} from "../../lib/utils";
-// import LoginApiCommand from '../../lib/commands/LoginApiCommand';
-// import PersonalApiCommand from '../../lib/commands/PersonalApiCommand';
+import {accountSchema, profileSchema, referenceSchema, supplementSchema} from "../../lib/schemas.js";
+import {validateData} from "../../lib/utils.js";
+
+import LoginApiCommand from '../../lib/commands/LoginApiCommand.js';
+import BankAccountApiCommand from '../../lib/commands/BankAccountApiCommand.js';
+import FinancialApiCommand from '../../lib/commands/FinancialApiCommand.js';
+import GuarantorApiCommand from '../../lib/commands/GuarantorApiCommand.js';
+import UserApiCommand from '../../lib/commands/UserApiCommand.js';
 
 const state = {
-    loginData: {},
-    profileData: {},
-    agreementData: {},
-    meetplaceData: '',
-    financialData: {},
-    bankAccountData: {},
-    guarantorData: {}
+    login: {},
+    bankAccount: {},
+    financial: {},
+    guarantor: {},
+    user: {}
 };
+
+const extractData = async (request) => {
+    const values = await request.formData();
+    const {isLast, ...data} = Object.fromEntries(values.entries());
+    return {isLast, data};
+}
+
 
 export const actions = {
     handleAccount: async ({request}) => {
-        let {isLast, data} = await extractData(request);
+            const {isLast, data} = await extractData(request);
 
-        state.loginData = {email: data.email, password: data.password};
-        state.profileData = {...state.profileData, phone: data.phone, cedula: data.cedula}
-        state.meetplaceData = data.meetplace;
-        state.agreementData = {termCondition: data.termCondition, personalInfo: data.personalInfo}
+            state.login = {email: data.email, password: data.password};
+            state.user = { phone: data.phone, cedula: data.cedula, meetPlace: data.meetPlace };
 
-        return await handleValidation({
-            ...data,
-            termCondition: Boolean(data.termCondition === 'on'),
-            personalInfo: Boolean(data.personalInfo === 'on')
-        }, accountSchema, isLast);
+            const accountData = {
+                ...data,
+                termCondition: Boolean(data.termCondition === 'on'),
+                personalInfo: Boolean(data.personalInfo === 'on')
+            }
+
+           return await handleValidation(accountData, accountSchema, isLast);
     },
 
     handleProfile: async ({request}) => {
@@ -36,8 +45,8 @@ export const actions = {
         const parsedDispatchDate = new Date(Date.parse(data.dispatchDate));
         const parsedBirthDate = new Date(Date.parse(data.birthDate));
 
-        state.profileData = {
-            ...state.profileData,
+        state.user = {
+            ...state.user,
             ...data,
             dispatchDate: parsedDispatchDate,
             birthDate: parsedBirthDate,
@@ -45,20 +54,20 @@ export const actions = {
         }
 
         // TODO: Posible refactorizacion: añadir la cedula y telefono a esta parte del formulario
-        return await handleValidation(state.profileData, profileSchema, isLast);
+        return await handleValidation(state.user, profileSchema, isLast);
     },
 
     handleSupplement: async ({request}) => {
         let {isLast, data} = await extractData(request);
 
-        state.bankAccountData = {
+        state.bankAccount = {
             bankName: data.bankName,
             bankType: data.bankType,
             bankNumber: data.bankNumber,
-            holder: data.holderName
+            bankHolder: data.bankHolder
         }
 
-        state.financialData = {
+        state.financial = {
             employeeType: data.employeeType,
             netMonthlyIncome: data.netMonthlyIncome,
             netMonthlyExpense: data.netMonthlyExpense,
@@ -73,48 +82,51 @@ export const actions = {
 
         const parsedDispatchDate = new Date(Date.parse(data.dispatchDate));
 
-        return await handleValidation({
+        state.guarantor = {
             ...data,
             dispatchDate: parsedDispatchDate
-        }, referenceSchema, isLast);
+        };
+        return await handleValidation(state.guarantor, referenceSchema, isLast);
     }
 }
 
-const extractData = async (request) => {
-    const values = await request.formData();
-    const {isLast, ...data} = Object.fromEntries(values.entries());
-    return {isLast, data};
-}
 
 const handleValidation = async (data, schema, isLast) => {
     const {errors} = await validateData(data, schema);
+    if (errors) return fail(400, { errors: errors.fieldErrors });
 
-    if (errors) {
-        return fail(400, {
-            errors: errors.fieldErrors
-        });
+    if (isLast === 'true') {
+        try {
+            await submitForm();
+            return { submitResult: { success: true } };
+        } catch (error){
+            console.log("Error message to send to user: ", error.message);
+            return fail(500, { submitResult: { success: false, message: error.message } });
+        }
     }
-
-    console.log(data);
-
-    // if (isLast) {
-    //     submitForm();
-    // }
 }
 
-// const submitForm = () => {
+const submitForm = async () => {
+    const userCommand = new UserApiCommand(state.user);
+    const commands = [
+        {name: "loginData", command: new LoginApiCommand(state.login)},
+        {name: "bankAccount", command: new BankAccountApiCommand(state.bankAccount)},
+        {name: "financialData", command: new FinancialApiCommand(state.financial)},
+        {name: "guarantorData", command: new GuarantorApiCommand(state.guarantor)}
+    ];
+    let executedCommands = [];
+    let uuids = {};
 
-//     const loginApiCommand = new LoginApiCommand(state.loginData);
-//     // const personalApiCommand = new PersonalApiCommand(state.personalData);
-
-//     Promise.all([loginApiCommand.execute()])
-//         .then(result => {
-//             console.log("All API calls succeeded:", result);
-//             return result;
-//         })
-//         .catch(error => {
-//             loginApiCommand.undo();
-//             // personalApiCommand.undo();
-//             throw error;
-//         })
-// }
+    try {
+        for (const {name, command} of commands) {
+            uuids[name] = await command.execute();
+            executedCommands.push(command);
+        }
+        userCommand.execute(uuids.loginData, uuids.bankAccount, uuids.financialData, uuids.guarantorData);
+    } catch (error){
+        for (const executedCommand of executedCommands.reverse()) {
+            executedCommand.undo();
+        }
+        throw error;
+    }
+};
