@@ -1,4 +1,4 @@
-[
+export default [
     "Abn Amro Bank Colombia",
     "Alianza Fiduciaria",
     "AV Villas",
