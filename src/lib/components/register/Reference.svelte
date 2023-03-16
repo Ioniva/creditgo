@@ -107,11 +107,11 @@
 				<Select id="employeeType" name="employeeType">
 					<!-- TODO: Guardar en minusculas en la base de datos -->
 					<SelectItem>Tipo de trabajador</SelectItem>
-					<SelectItem value="Empleado">Empleado</SelectItem>
-					<SelectItem value="Independiente">Independiente</SelectItem>
-					<SelectItem value="Pensionado">Pensionado</SelectItem>
-					<SelectItem value="Desempleado">Desempleado</SelectItem>
-					<SelectItem value="Prestador de servicios">Prestador de servicios</SelectItem>
+					<SelectItem value="E">Empleado</SelectItem>
+					<SelectItem value="I">Independiente</SelectItem>
+					<SelectItem value="P">Pensionado</SelectItem>
+					<SelectItem value="D">Desempleado</SelectItem>
+					<SelectItem value="R">Prestador de servicios</SelectItem>
 				</Select>
 				<!-- TODO: Añadir el label de error en el componente -->
 				{#if errors?.employeeType}
