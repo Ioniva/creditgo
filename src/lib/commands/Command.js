@@ -4,4 +4,4 @@ class Command {
     undo() {}
   }
 
-  export default Command;
+export default Command;
