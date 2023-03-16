@@ -2,7 +2,7 @@
 	import Select from '../ui-library/Select/Select.svelte';
 	import SelectItem from '../ui-library/Select/SelectItem.svelte';
 
-	import banks from '../../content/banks.json';
+	import banks from '../../content/banks.js';
 	import Input from '../ui-library/Input/Input.svelte';
 
 	export let errors;
@@ -41,8 +41,8 @@
 				<Select id="bankType" name="bankType">
 					<!-- TODO: Guardar en minusculas en la base de datos -->
 					<SelectItem>Tipo de cuenta</SelectItem>
-					<SelectItem value="Ahorro">Ahorro</SelectItem>
-					<SelectItem value="Corriente">Corriente</SelectItem>
+					<SelectItem value="A">Ahorro</SelectItem>
+					<SelectItem value="C">Corriente</SelectItem>
 				</Select>
 				<!-- TODO: Añadir el label de error en el componente -->
 				{#if errors?.bankType}
@@ -56,10 +56,10 @@
 			<!-- bank holder name -->
 			<Input
 				type="text"
-				id="holder"
+				id="bankHolder"
 				label="Titular de la cuenta*"
 				placeholder="Inserte aquí el nombre del titular*"
-				errors={errors?.holder}
+				errors={errors?.bankHolder}
 			/>
 		</div>
 		<div class="mb-6 w-full group">
@@ -88,11 +88,11 @@
 				<Select id="employeeType" name="employeeType">
 					<!-- TODO: Guardar en minusculas en la base de datos -->
 					<SelectItem>Tipo de trabajador</SelectItem>
-					<SelectItem value="Empleado">Empleado</SelectItem>
-					<SelectItem value="Independiente">Independiente</SelectItem>
-					<SelectItem value="Pensionado">Pensionado</SelectItem>
-					<SelectItem value="Desempleado">Desempleado</SelectItem>
-					<SelectItem value="Prestador de servicios">Prestador de servicios</SelectItem>
+					<SelectItem value="E">Empleado</SelectItem>
+					<SelectItem value="I">Independiente</SelectItem>
+					<SelectItem value="P">Pensionado</SelectItem>
+					<SelectItem value="D">Desempleado</SelectItem>
+					<SelectItem value="R">Prestador de servicios</SelectItem>
 				</Select>
 				<!-- TODO: Añadir el label de error en el componente -->
 				{#if errors?.employeeType}
