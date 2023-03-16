@@ -1,5 +1,5 @@
 <script>
-	import Input from '../../lib/components/ui-library/Input/Input.svelte';
+	export let form;
 </script>
 
 <section class="h-screen">
@@ -14,6 +14,13 @@
 			</div>
 			<div class="md:w-8/12 lg:w-5/12 lg:ml-20">
 				<h1 class="my-8">Login page</h1>
+				<!-- error -->
+				{#if form?.error}
+					<label for="credentials" class="unstyled text-2xl text-red-500 pb-4">
+						<!-- Credenciales incorrectas. Por favor, Intente nuevamente. -->
+						{form.error}
+					</label>
+				{/if}
 				<form action="?" method="POST">
 					<!-- Email input -->
 					<div class="mb-6">
