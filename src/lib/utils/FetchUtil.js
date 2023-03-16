@@ -1,43 +1,36 @@
 class FetchUtil {
-    static async fetchData(url, method, data) {
-        const response = await fetch(url, {
-            method,
-            body: data ? JSON.stringify(data) : null,
-            headers: {
-                "Content-Type": "application/json"
-            },
-        });
-        if (!response.ok) {
-            throw new Error(`Fetch error: ${response.status}`);
-        }
-        return response.json();
-    }
-
     static async get(url) {
+        const headers = { "Content-Type": "application/json" };
         const response = await fetch(url, {
             method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: headers,
         });
-        if (!response.ok) {
-            throw new Error(`Fetch error: ${response.status}`);
-        }
         return response.json();
     }
 
     static async post(url, data) {
-        const response = await fetch(url, {
-            method: "POST",
-            body: data ? JSON.stringify(data) : null,
-            headers: {
-                "Content-Type": "application/json"
-            },
-        });
-        if (!response.ok) {
-            throw new Error(`Fetch error: ${response.status}`);
-        }
-        return response.json();
+        const headers = { "Content-Type": "application/json" };
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify(data),
+            });
+            if (!response.ok) { throw new Error (`FetchUtil.post failed: ${await response.json()}`) }
+            return response.json();
+        } catch (error) { throw new Error(`FetchUtil.post failed: ${error.message}`) }
+    }
+
+    static async delete(url) {
+        const headers = { "Content-Type": "application/json" };
+        try {
+            const response = await fetch(url, {
+                method: "DELETE",
+                headers: headers,
+            })
+            if (!response.ok) { throw new Error(`FetchUtil.delete failed: ${await response.json()}`) }
+            return response.json();
+        } catch (error) { throw new Error(`FetchUtil.delete failed: ${error.message}`) }
     }
 }
 
