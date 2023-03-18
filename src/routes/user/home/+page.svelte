@@ -1,15 +1,35 @@
 <script>
 	import { Paginator, Table, tableMapperValues } from '@skeletonlabs/skeleton';
+	import { onMount } from 'svelte';
 	import Temporizador from '../../../lib/components/temporizador/Temporizador.svelte';
 
-	const sourceHeaders = ['Fecha y hora', 'Cantidad', 'Estado'];
-	const sourceBody = [
-		['2021/09/03 02:10:59 PM', '$ 5000', 'Pendiente...'],
-		['2021/09/03 02:10:59 PM', '$ 5000', 'Aceptado'],
-		['2021/09/03 02:10:59 PM', '$ 5000', 'Aceptado'],
-		['2021/09/03 02:10:59 PM', '$ 5000', 'Rechazado'],
-		['2021/09/03 02:10:59 PM', '$ 5000', 'Aceptado']
+	export let data;
+	const solicitations = data.solicitations;
+
+	const sourceHeaders = [
+		'Fecha de solicitud',
+		'Cantidad',
+		'Días a pagar',
+		'Estado',
+		'Razon de rechazo'
 	];
+	const sourceBody = [];
+
+	for (const solicitation of solicitations) {
+		sourceBody.push([
+			solicitation.applicated_at,
+			solicitation.amount,
+			solicitation.paymentDays,
+			solicitation.state.name,
+			solicitation.rejection_reason ?? 'Ninguno'
+		]);
+	}
+
+	const lastPayDay = new Date(solicitations.at(-1).applicated_at).setDate(
+		new Date(solicitations.at(-1).applicated_at).getDate() + solicitations.at(-1).paymentDays
+	);
+
+	const lastAmount = solicitations.at(-1).amount;
 
 	// Reactive
 	let page = {
@@ -31,13 +51,13 @@
 		class="lg:w-1/2 w-auto m-8 p-10 border-solid border-2 border-black bg-blue-400 bg-opacity-25"
 	>
 		<p class="unstyled text-3xl">Cupo disponible</p>
-		<p class="unstyled text-5xl">$ 300</p>
+		<p class="unstyled text-5xl">$ {lastAmount}</p>
 	</div>
 	<div
 		class="lg:w-1/2 w-auto m-8 p-10 border-solid border-2 border-black bg-blue-400 bg-opacity-25"
 	>
 		<p class="unstyled text-3xl">Pagar antes de...</p>
-		<Temporizador resultado="No hay ningun cupo" />
+		<Temporizador resultado="No hay ningun cupo" lastDay={lastPayDay} />
 	</div>
 </div>
 
