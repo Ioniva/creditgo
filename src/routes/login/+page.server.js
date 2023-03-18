@@ -5,7 +5,7 @@ const SIGNIN_URL = "http://127.0.0.1:4000/api/v1/auth/signin";
 export const actions = {
     default: async (event) => {
         const { email, password } =  Object.fromEntries(await event.request.formData());
-        console.log("email: ", email, "password: ", password);
+        if (!email || !password) return fail(400, {error: 'Missing email or password'});
 
         const response = await fetch (SIGNIN_URL, {
             method: 'POST',
@@ -17,13 +17,13 @@ export const actions = {
         const {token} = await response.json();
         if (!token) return fail(500, {error: 'No token from server'});
 
-        event.cookies.set('AuthorizationToken', `Bearer ${token}`, {
+        event.cookies.set('AuthorizationToken', `bearer ${token}`, {
             httpOnly: true,
             path: '/',
             secure: true,
             sameSite: 'strict',
             maxAge: 60 * 60 * 24 // 1 day
         });
-        throw redirect(302, '/user/dashboard');
+        throw redirect(302, '/user/home');
     }
 }
