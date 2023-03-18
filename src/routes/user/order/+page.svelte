@@ -1,6 +1,8 @@
 <script>
 	import { ProgressRadial, RadioGroup, RadioItem, RangeSlider } from '@skeletonlabs/skeleton';
 	import { writable } from 'svelte/store';
+	import { goto } from '$app/navigation';
+	import { applyAction, deserialize } from '$app/forms';
 
 	let daysToAdd = writable(0);
 	let value = 0;
@@ -13,12 +15,29 @@
 	$: futureDate = new Date(currentDate.getTime() + $daysToAdd * 24 * 60 * 60 * 1000);
 	const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 	$: formattedDate = futureDate.toLocaleDateString('es-CO', options);
+
+	async function handleSubmit(event) {
+		const form = event.target;
+		const formData = new FormData(form);
+		formData.set('amount', value);
+		formData.set('paymentDays', $daysToAdd);
+
+		const response = await fetch(event.target.action, {
+			method: event.target.method,
+			body: formData
+		});
+
+		const result = deserialize(await response.text());
+		if (result.type === 'success') goto('/user/home');
+
+		applyAction(result);
+	}
 </script>
 
 <div
 	class="mx-auto h-full w-1/2 container text-center flex justify-center items-center border-solid border-8 border-black border-indigo-500/40 !bg-secondary-500/5"
 >
-	<form action="">
+	<form action="?" method="POST" on:submit|preventDefault={handleSubmit}>
 		<div class="w-full my-8">
 			<label for="" class="text-2xl">1. ¿Cúanto dinero necesitas?</label>
 			<ProgressRadial class="w-1/2 mx-auto my-6" value={1000}>$ {value}</ProgressRadial>
