@@ -1,4 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
+import jwt from 'jsonwebtoken'
 
 const SIGNIN_URL = "http://127.0.0.1:4000/api/v1/auth/signin";
 
@@ -24,6 +25,12 @@ export const actions = {
             sameSite: 'strict',
             maxAge: 60 * 60 * 24 // 1 day
         });
-        throw redirect(302, '/user/home');
+
+        const {roles} = jwt.verify(token, import.meta.env.VITE_JWT_SECRET);
+        if (roles.includes('A')) throw redirect(302, '/admin/dashboard');
+        if (roles.includes('L')) throw redirect(302, '/lender/transactions');
+        if (roles.includes('C')) throw redirect(302, '/user/home');
+
+
     }
 }
