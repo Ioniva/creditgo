@@ -32,6 +32,19 @@ class FetchUtil {
             return response.json();
         } catch (error) { throw new Error(`FetchUtil.delete failed: ${error.message}`) }
     }
+
+    static async patch(url, body) {
+        const headers = { "Content-Type": "application/json" };
+        try {
+            const response = await fetch(url, {
+                method: "PATCH",
+                headers: headers,
+                body: JSON.stringify(body),
+            })
+            if (!response.ok) { throw new Error(`FetchUtil.patch failed: ${await response.json()}`) }
+            return response.json();
+        } catch (error) { throw new Error(`FetchUtil.patch failed: ${JSON.stringify(error)}`) }
+    }
 }
 
 export default FetchUtil;
