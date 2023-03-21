@@ -6,8 +6,7 @@ export const handle = async ({event, resolve}) => {
     if (authCookie) {
         const token = authCookie.replace('bearer ', '');
         try {
-            const {id, email} = jwt.verify(token, import.meta.env.VITE_JWT_SECRET);
-            const payload = {id, email};
+            const payload = jwt.verify(token, import.meta.env.VITE_JWT_SECRET);
             event.locals.user = payload;
         }
         catch (err) {
