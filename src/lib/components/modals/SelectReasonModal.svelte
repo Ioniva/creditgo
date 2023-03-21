@@ -8,10 +8,7 @@
 	export let parent = [];
 	export let uuid = '';
 
-	// Store
 	const selectedReason = writable('none');
-
-	// Local
 	let valorations = [];
 
 	onMount(async () => {
@@ -24,21 +21,20 @@
 		return response.rejectionReasons;
 	};
 
-	const submitSolicitation = () => {
-		const url = 'http://localhost:4000/api/v1/solicitation';
+	const submitSolicitation = async () => {
+		const url = `http://localhost:4000/api/v1/solicitations/${uuid}`;
 		const data = {
-			uuid: uuid,
 			state: 'R',
 			rejectionReason: $selectedReason
 		};
-		FetchUtil.post(url, data);
+		return await FetchUtil.patch(url, data);
 	};
 
 	async function handleConfirmation() {
 		if ($selectedReason === 'none') return;
-		// const response = await submitSolicitation();
-		const response = { status: 200 };
-		if (response.status === 200) {
+		const response = await submitSolicitation();
+
+		if (response) {
 			$modalStore[0].response({ success: true });
 		} else {
 			$modalStore[0].response({ error: true });
