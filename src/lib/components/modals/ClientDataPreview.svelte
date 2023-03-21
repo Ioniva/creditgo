@@ -1,28 +1,43 @@
 <script>
 	import { modalStore } from '@skeletonlabs/skeleton';
+	import { afterUpdate, onMount } from 'svelte';
+	import FetchUtil from '../../utils/FetchUtil';
 
 	// Props
 	/** Exposes parent props to this component. */
 	export let parent;
 	export let uuid;
 
-	const submitSolicitation = () => {
-		const url = 'http://localhost:4000/api/v1/solicitation';
+	const submitSolicitation = async () => {
+		const url = `http://localhost:4000/api/v1/solicitations/${uuid}`;
 		const data = {
-			uuid: uuid,
 			state: 'A'
 		};
-		FetchUtil.post(url, data);
+		return await FetchUtil.patch(url, data);
 	};
 
-	function handleConfirmation() {
-		// const response = await submitSolicitation();
-		const response = { status: 200 };
-		if (response.status === 200) {
+	// local
+	let client = {};
+
+	onMount(async () => {
+		client = await getSolicitationByUUID(uuid);
+	});
+
+	const getSolicitationByUUID = async () => {
+		const url = `http://localhost:4000/api/v1/solicitations/details/${uuid}`;
+		const response = await FetchUtil.get(url);
+		return await response.solicitation.users[0];
+	};
+
+	async function handleConfirmation() {
+		const response = await submitSolicitation();
+
+		if (response) {
 			$modalStore[0].response({ success: true });
 		} else {
 			$modalStore[0].response({ error: true });
 		}
+
 		modalStore.close();
 	}
 </script>
@@ -33,29 +48,29 @@
 		<div class="mt-2 flex flex-wrap gap-4">
 			<p class="flex-[1_0_auto%]">
 				<span class="font-bold">Nombre y apellidos: </span>
-				{parent.name}
-				{parent.surname}
-			</p>
-			<p class="flex-[3_0_auto%]">
-				<span class="font-bold">Edad: </span>
-				{parent.age}
+				{client.name}
+				{client.surname}
 			</p>
 			<p class="flex-[1_0_auto%]">
 				<span class="font-bold">Género: </span>
-				{parent.gendre}
+				{client.genre}
 			</p>
 			<p class="flex-[2_0_auto%]">
 				<span class="font-bold">Cédula: </span>
-				{parent.cedula}
+				{client.cedula}
 			</p>
 			<p class="flex-[1_0_auto%]">
 				<span class="font-bold">F.Exp: </span>
-				{parent.dispatchDate}
+				{client.dispatchDate}
 			</p>
 			<p class="flex-[1_0_auto%]">
 				<span class="font-bold">Lugar Exp: </span>
-				{parent.dispatchPlace}
+				{client.dispatchPlace}
 			</p>
+			<!-- <p class="flex-[1_0_auto%]">
+				<span class="font-bold">Fecha de nacimiento: </span>
+				{JSON.stringify(client.financial.employeeType)}
+			</p> -->
 		</div>
 	</div>
 	<div class="h-1/2">
@@ -64,15 +79,16 @@
 			<div class="mt-2 flex flex-wrap gap-4">
 				<p class="flex-[3_0_auto%]">
 					<span class="font-bold">Ingreso neto mensual: </span>
-					{parent.netMonthlyIncome}
+					{client.financial ? client.financial.netMonthlyIncome : ''}
 				</p>
 				<p class="flex-[3_0_auto%]">
 					<span class="font-bold">Ingresos adicionales: </span>
-					{parent.additionalIncome}
+					{client.financial ? client.financial.additionalIncome : ''}
 				</p>
 				<p class="flex-[1_0_auto%]">
 					<span class="font-bold">Tipo de empleado: </span>
-					{parent.employeeType}
+					<!-- TODO: El employeeType no deberia de estar dentro de financial. no tiene sentido -->
+					{client.financial ? client.financial.employeeType.name : ''}
 				</p>
 			</div>
 		</div>
