@@ -1,6 +1,5 @@
 <script>
 	import { Paginator, Table, tableMapperValues } from '@skeletonlabs/skeleton';
-	import { onMount } from 'svelte';
 	import Temporizador from '../../../lib/components/temporizador/Temporizador.svelte';
 
 	export let data;
@@ -21,15 +20,30 @@
 			solicitation.amount,
 			solicitation.paymentDays,
 			solicitation.state.name,
-			solicitation.rejection_reason ?? 'Ninguno'
+			solicitation.rejection_reason ? solicitation.rejection_reason['name'] : 'No hay razon'
 		]);
 	}
 
-	const lastPayDay = new Date(solicitations.at(-1).applicated_at).setDate(
-		new Date(solicitations.at(-1).applicated_at).getDate() + solicitations.at(-1).paymentDays
-	);
+	function lastPayDay() {
+		if (solicitations.length === 0) return;
+		const aprovedSolicitations = solicitations.filter(
+			(solicitation) => solicitation.state.code === 'A'
+		);
+		if (aprovedSolicitations.length === 0) return;
+		return new Date(aprovedSolicitations.at(-1).applicated_at).setDate(
+			new Date(aprovedSolicitations.at(-1).applicated_at).getDate() +
+				aprovedSolicitations.at(-1).paymentDays
+		);
+	}
 
-	const lastAmount = solicitations.at(-1).amount;
+	function lastAmount() {
+		if (solicitations.length === 0) return 'No hay ningun cupo';
+		const aprovedSolicitations = solicitations.filter(
+			(solicitation) => solicitation.state.code === 'A'
+		);
+		if (aprovedSolicitations.length === 0) return 'No hay ningun cupo';
+		return aprovedSolicitations.at(-1).amount;
+	}
 
 	// Reactive
 	let page = {
@@ -51,13 +65,17 @@
 		class="lg:w-1/2 w-auto m-8 p-10 border-solid border-2 border-black bg-blue-400 bg-opacity-25"
 	>
 		<p class="unstyled text-3xl">Cupo disponible</p>
-		<p class="unstyled text-5xl">$ {lastAmount}</p>
+		<p class="unstyled text-5xl">{lastAmount()}</p>
 	</div>
 	<div
 		class="lg:w-1/2 w-auto m-8 p-10 border-solid border-2 border-black bg-blue-400 bg-opacity-25"
 	>
 		<p class="unstyled text-3xl">Pagar antes de...</p>
-		<Temporizador resultado="No hay ningun cupo" lastDay={lastPayDay} />
+		{#if lastPayDay}
+			<Temporizador resultado="No hay ningun cupo" lastDay={lastPayDay()} />
+		{:else}
+			<Temporizador resultado="No hay ningun cupo" />
+		{/if}
 	</div>
 </div>
 

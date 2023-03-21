@@ -1,8 +1,8 @@
-import { fail } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 
 export const load = async (event) => {
     const token = event.cookies.get('AuthorizationToken');
-    if (!token) fail(401, {error: 'Missing token'});
+    if (!token) redirect(303, '/login');
 
     const response = await fetch("http://127.0.0.1:4000/api/v1/me/solicitations", {
         method: "GET",
