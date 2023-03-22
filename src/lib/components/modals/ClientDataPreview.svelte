@@ -67,10 +67,6 @@
 				<span class="font-bold">Lugar Exp: </span>
 				{client.dispatchPlace}
 			</p>
-			<!-- <p class="flex-[1_0_auto%]">
-				<span class="font-bold">Fecha de nacimiento: </span>
-				{JSON.stringify(client.financial.employeeType)}
-			</p> -->
 		</div>
 	</div>
 	<div class="h-1/2">
