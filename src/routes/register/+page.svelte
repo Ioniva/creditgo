@@ -52,7 +52,6 @@
 				<span class="text-3xl font-bold">Datos de tu cuenta</span>
 			</svelte:fragment>
 			<svelte:fragment slot="form">
-				<h2>Form 1</h2>
 				<Account errors={form?.errors} />
 			</svelte:fragment>
 		</Step>
@@ -62,7 +61,6 @@
 				<span class="text-3xl font-bold">Datos personales</span>
 			</svelte:fragment>
 			<svelte:fragment slot="form">
-				<h2>Form 2</h2>
 				<Personal errors={form?.errors} />
 			</svelte:fragment>
 		</Step>
@@ -72,7 +70,6 @@
 				<span class="text-3xl font-bold">Datos adicionales</span>
 			</svelte:fragment>
 			<svelte:fragment slot="form">
-				<h2>Form 3</h2>
 				<Supplement errors={form?.errors} />
 			</svelte:fragment>
 		</Step>
@@ -82,7 +79,6 @@
 				<span class="text-3xl font-bold">Datos del aval (garantor)</span>
 			</svelte:fragment>
 			<svelte:fragment slot="form">
-				<h2>Form 4</h2>
 				<Reference errors={form?.errors} />
 			</svelte:fragment>
 		</Step>
